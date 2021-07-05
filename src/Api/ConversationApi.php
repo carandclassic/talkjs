@@ -9,19 +9,15 @@ declare(strict_types=1);
 
 namespace CarAndClassic\TalkJS\Api;
 
-use CarAndClassic\TalkJS\Enumerations\MessageType;
-use CarAndClassic\TalkJS\Models;
 use CarAndClassic\TalkJS\Models\Conversation;
 use CarAndClassic\TalkJS\Models\ConversationCreatedOrUpdated;
 use CarAndClassic\TalkJS\Models\ConversationJoined;
 use CarAndClassic\TalkJS\Models\ConversationLeft;
-use CarAndClassic\TalkJS\Models\Message;
-use CarAndClassic\TalkJS\Models\MessageCreated;
 use CarAndClassic\TalkJS\Models\ParticipationUpdated;
 use Exception;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-final class ConversationApi extends TalkJSApi
+class ConversationApi extends TalkJSApi
 {
     /**
      * @throws Exception|TransportExceptionInterface
@@ -29,7 +25,7 @@ final class ConversationApi extends TalkJSApi
     public function createOrUpdate(string $id, array $params): ConversationCreatedOrUpdated
     {
         $data = $this->parseResponseData($this->httpPut("conversations/$id", $params));
-        
+
         return new ConversationCreatedOrUpdated();
     }
 
@@ -39,7 +35,7 @@ final class ConversationApi extends TalkJSApi
     public function get(string $id): Conversation
     {
         $data = $this->parseResponseData($this->httpGet("conversations/$id"));
-        
+
         return Conversation::createFromArray($data['data']);
     }
 
@@ -85,52 +81,5 @@ final class ConversationApi extends TalkJSApi
         $data = $this->parseResponseData($this->httpDelete("conversations/$conversationId/participants/$userId"));
 
         return new ConversationLeft();
-    }
-
-    /**
-     * @throws Exception|TransportExceptionInterface
-     */
-    public function findMessages(string $conversationId, array $filters = []): array
-    {
-        $data = $this->parseResponseData($this->httpGet("conversations/$conversationId/messages", $filters));
-
-        return Message::createManyFromArray($data['data']);
-    }
-
-    /**
-     * @throws Exception|TransportExceptionInterface
-     */
-    public function postSystemMessage(string $conversationId, string $text, array $custom = []): Models\MessageCreated
-    {
-        $data = $this->parseResponseData(
-            $this->httpPost("conversations/$conversationId/messages", [
-                [
-                    'type' => 'SystemMessage',
-                    'text' => $text,
-                    'custom' => (object) $custom,
-                ],
-            ])
-        );
-
-        return new MessageCreated(MessageType::SYSTEM);
-    }
-
-    /**
-     * @throws Exception|TransportExceptionInterface
-     */
-    public function postUserMessage(string $conversationId, string $sender, string $text, array $custom = []): MessageCreated
-    {
-        $data = $this->parseResponseData(
-            $this->httpPost("conversations/$conversationId/messages", [
-                [
-                    'type' => 'UserMessage',
-                    'sender' => $sender,
-                    'text' => $text,
-                    'custom' => (object) $custom,
-                ],
-            ])
-        );
-
-        return new MessageCreated(MessageType::USER);
     }
 }

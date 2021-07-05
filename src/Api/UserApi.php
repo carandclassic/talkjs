@@ -14,7 +14,7 @@ use CarAndClassic\TalkJS\Models\UserCreatedOrUpdated;
 use Exception;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-final class UserApi extends TalkJSApi
+class UserApi extends TalkJSApi
 {
     /**
      * @throws Exception|TransportExceptionInterface

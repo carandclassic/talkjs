@@ -6,7 +6,10 @@ namespace CarAndClassic\TalkJS\Models;
 
 class User implements CreatableFromArray
 {
-    public string $id;
+    /**
+     * @var string|int
+     */
+    public $id;
     
     public string $name;
 

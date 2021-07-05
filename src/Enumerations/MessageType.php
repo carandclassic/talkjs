@@ -6,6 +6,7 @@ namespace CarAndClassic\TalkJS\Enumerations;
 
 final class MessageType
 {
-    public const SYSTEM = 'system';
-    public const USER = 'user';
+    public const SYSTEM = 'SystemMessage';
+    public const USER = 'UserMessage';
+
 }

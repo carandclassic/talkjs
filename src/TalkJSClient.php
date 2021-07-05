@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace CarAndClassic\TalkJS;
 
 use CarAndClassic\TalkJS\Api\ConversationApi;
+use CarAndClassic\TalkJS\Api\MessageApi;
 use CarAndClassic\TalkJS\Api\UserApi;
 use Symfony\Component\HttpClient\HttpClient;
 
@@ -19,6 +20,8 @@ final class TalkJSClient
 
     public ConversationApi $conversationApi;
 
+    public MessageApi $messageApi;
+
     public function __construct(string $appId, string $secretKey)
     {
         $httpClient = HttpClient::create([
@@ -26,9 +29,11 @@ final class TalkJSClient
             'auth_bearer' => $secretKey,
             'headers' => [
                 'Content-Type' => 'application/json',
+                'Accept' => 'application/json'
             ],
         ]);
         $this->userApi = new UserApi($httpClient);
         $this->conversationApi = new ConversationApi($httpClient);
+        $this->messageApi = new MessageApi($httpClient);
     }
 }

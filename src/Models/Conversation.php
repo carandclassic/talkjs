@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace CarAndClassic\TalkJS\Models;
 
-use CarAndClassic\TalkJS\Models\CreatableFromArray;
-
 class Conversation implements CreatableFromArray
 {
-    public string $id;
+    /**
+     * @var string|int
+     */
+    public $id;
 
     public string $subject;
 

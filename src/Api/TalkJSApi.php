@@ -43,7 +43,7 @@ abstract class TalkJSApi
      */
     protected function httpPost(string $path, array $params = [], array $requestHeaders = []): ResponseInterface
     {
-        return $this->httpRequest('POST', $path, $this->createJsonBody($params), $requestHeaders);
+        return $this->httpRequest('POST', $path, $params, $requestHeaders);
     }
 
     /**
@@ -52,7 +52,7 @@ abstract class TalkJSApi
      */
     protected function httpPut(string $path, array $params = [], array $requestHeaders = []): ResponseInterface
     {
-        return $this->httpRequest('PUT', $path, $this->createJsonBody($params), $requestHeaders);
+        return $this->httpRequest('PUT', $path, $params, $requestHeaders);
     }
 
     /**
@@ -61,7 +61,7 @@ abstract class TalkJSApi
      */
     protected function httpPatch(string $path, array $params = [], array $requestHeaders = []): ResponseInterface
     {
-        return $this->httpRequest('PATCH', $path, $this->createJsonBody($params), $requestHeaders);
+        return $this->httpRequest('PATCH', $path, $params, $requestHeaders);
     }
 
     /**
@@ -70,7 +70,7 @@ abstract class TalkJSApi
      */
     protected function httpDelete(string $path, array $params = [], array $requestHeaders = []): ResponseInterface
     {
-        return $this->httpRequest('DELETE', $path, $this->createJsonBody($params), $requestHeaders);
+        return $this->httpRequest('DELETE', $path, $params, $requestHeaders);
     }
 
     /**
@@ -87,9 +87,10 @@ abstract class TalkJSApi
         $dataKey = 'query';
         if (in_array($type, ['POST', 'PUT', 'PATCH', 'DELETE'])) {
             $dataKey = 'body';
+            $params = $this->createJsonBody($params);
         }
         return $this->httpClient->request($type, $path, [
-            $dataKey => $this->createJsonBody($params),
+            $dataKey => $params,
             'headers' => $requestHeaders,
         ]);
 
@@ -146,12 +147,12 @@ abstract class TalkJSApi
         }
 
         if (!isset($response->getHeaders()['content-type'])) {
-            throw new ResponseException('The ModelHydrator cannot hydrate response without Content-Type header.');
+            throw new ResponseException('No content-type header returned');
         }
 
         $contentType = reset($response->getHeaders()['content-type']);
         if (0 !== strpos($contentType, 'application/json')) {
-            throw new ResponseException("The ModelHydrator cannot hydrate response with Content-Type: $contentType");
+            throw new ResponseException("Invalid content-type header. Expecting application/json, got $contentType");
         }
 
         $data = json_decode($response->getContent(), true);
