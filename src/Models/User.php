@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CarAndClassic\TalkJS\Models;
 
-class User implements CreatableFromArray
+class User
 {
     /**
      * @var string|int
@@ -31,9 +31,6 @@ class User implements CreatableFromArray
 
     public \DateTimeImmutable $createdAt;
 
-    /**
-     * {@inheritdoc}
-     */
     public static function createFromArray(array $data): User
     {
         $timestamp = round($data['createdAt'] / 1000, 0);

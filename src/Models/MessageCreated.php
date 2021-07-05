@@ -16,7 +16,7 @@ class MessageCreated
 
     public array $custom;
 
-    public function __construct(string $type, ?string $sender, string $text, array $custom)
+    public function __construct(string $type, ?string $sender, string $text, array $custom = [])
     {
         $this->type = $type;
         $this->sender = $sender;

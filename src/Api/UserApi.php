@@ -23,7 +23,7 @@ class UserApi extends TalkJSApi
     {
         $data = $this->parseResponseData($this->httpPut("users/$id", $params));
 
-        return new UserCreatedOrUpdated();
+        return UserCreatedOrUpdated::createFromArray($id, $params);
     }
 
     /**

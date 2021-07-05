@@ -6,9 +6,8 @@ namespace CarAndClassic\TalkJS\Models;
 
 use CarAndClassic\TalkJS\Enumerations\MessageType;
 
-class Message implements CreatableFromArray
+class Message
 {
-
     /**
      * @var string|int
      */
@@ -34,9 +33,6 @@ class Message implements CreatableFromArray
 
     public ?string $attachment;
 
-    /**
-     * {@inheritdoc}
-     */
     public static function createFromArray(array $data): self
     {
         $timestamp = round($data['createdAt'] / 1000, 0);
