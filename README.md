@@ -3,6 +3,9 @@
 [![Latest version](https://img.shields.io/github/release/CarAndClassic/talkjs.svg?style=flat-square)](https://github.com/CarAndClassic/talkjs/releases)
 [![Total downloads](https://img.shields.io/packagist/dt/CarAndClassic/talkjs.svg?style=flat-square)](https://packagist.org/packages/CarAndClassic/talkjs)
 
+Forked from [shapintv/talkjs](https://github.com/shapintv/talkjs).
+
+For more information on parameters, custom data, and other things you can send with this API, please see the [TalkJS REST API documentation](https://talkjs.com/docs/Reference/REST_API/Getting_Started/Introduction.html).
 
 ## Install
 
@@ -18,6 +21,9 @@ $ composer require carandclassic/talkjs
 
 ```php
 use CarAndClassic\TalkJS\TalkJSClient;
+
+$appId = 'your App ID';
+$secretKey = 'your secret key';
 $talkJSClient = new TalkJSClient($appId, $secretKey);
 ```
 
@@ -25,38 +31,57 @@ $talkJSClient = new TalkJSClient($appId, $secretKey);
 
 ```php
 // Create or update a user
-$talkJsClient->users()->createOrUpdate('my_custom_id', [
+$talkJsClient->userApi->createOrUpdate('my_custom_id', [
     'email' => 'georges@abitbol.com',
 ]);
 
 // Retrieve a user
-$user = $talkJsClient->users()->get('my_custom_id');
+$user = $talkJsClient->userApi->get('my_custom_id');
 ```
 
 ### Conversations
 
 ```php
 // Create or update a conversation
-$talkJsClient->conversations()->createOrUpdate('my_custom_id', [
+$talkJsClient->conversationApi->createOrUpdate('my_custom_id', [
     'subject' => 'My new conversation',
 ]);
 
 // Retrive a conversation
-$conversation = $talkJsClient->conversations()->get('my_custom_id');
+$conversation = $talkJsClient->conversationApi->get('my_custom_id');
 
 // Find conversations
-$conversations = $talkJsClient->conversations()->find();
+$conversations = $talkJsClient->conversationApi->find();
 
 // Join a conversation
-$talkJsClient->conversation()->join('my_conversation_id', 'my_user_id');
+$talkJsClient->conversationApi->join('my_conversation_id', 'my_user_id');
 
 // Leave a conversation
-$talkJsClient->conversation()->leave('my_conversation_id', 'my_user_id');
+$talkJsClient->conversationApi->leave('my_conversation_id', 'my_user_id');
 ```
 
 ### Messages
 
+For more information on custom data and filters, please refer to the TalkJS documentation linked above.
 
+```php
+$custom = [
+  // custom TalkJS data
+];
+
+// Post a system message
+$talkJsClient->messageApi->postSystemMessage($conversationId, $message, $custom);
+
+// Post a user message
+$talkJsClient->messageApi->postUserMessage($conversationId, $username, $message, $custom);
+
+// Find messages in a conversation
+$filters = [
+    'limit' => 50,
+    'startingAfter' => 'latestMessageId'
+];
+$talkJsClient->messageApi->findMessages($conversationId, $filters);
+```
 
 ### Integration with symfony
 
@@ -79,10 +104,6 @@ Then create your service:
 services:
     CarAndClassic\TalkJS\TalkJSClient: ~
 ```
-
-You're done!
-
-One day, I may consider creating a bundle in order to bootstrap this SDK...
 
 ## License
 
