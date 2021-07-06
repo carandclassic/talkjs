@@ -6,36 +6,43 @@ namespace CarAndClassic\TalkJS\Models;
 
 class UserCreatedOrUpdated
 {
-    /**
-     * @var string|int
-     */
-    public $id;
+    public string $id;
 
     public string $name;
 
-    public array $email;
+    public ?array $email;
 
     public ?string $welcomeMessage;
 
     public ?string $photoUrl;
 
-    public string $role;
+    public ?string $headerPhotoUrl;
 
-    public array $phone;
+    public ?string $role;
 
-    public array $custom;
+    public ?array $phone;
 
-    public static function createFromArray($id, array $params): UserCreatedOrUpdated
+    public ?array $custom;
+
+    public ?string $availabilityText;
+
+    public ?string $locale;
+
+    public static function createFromArray(string $id, array $data): UserCreatedOrUpdated
     {
-        $userCreatedOrUpdated = new UserCreatedOrUpdated();
+        $userCreatedOrUpdated = new self();
         $userCreatedOrUpdated->id = $id;
-        $userCreatedOrUpdated->name = $params['name'];
-        $userCreatedOrUpdated->email = $params['email'] ?? [];
-        $userCreatedOrUpdated->welcomeMessage = $params['welcomeMessage'] ?? null;
-        $userCreatedOrUpdated->photoUrl = $params['photoUrl'] ?? null;
-        $userCreatedOrUpdated->role = $params['role'];
-        $userCreatedOrUpdated->phone = $params['phone'] ?? [];
-        $userCreatedOrUpdated->custom = $params['custom'] ?? [];
+        $userCreatedOrUpdated->name = $data['name'];
+        $userCreatedOrUpdated->welcomeMessage = $data['welcomeMessage'] ?? null;
+        $userCreatedOrUpdated->photoUrl = $data['photoUrl'] ?? null;
+        $userCreatedOrUpdated->headerPhotoUrl = $data['headerPhotoUrl'] ?? null;
+        $userCreatedOrUpdated->role = $data['role'];
+        $userCreatedOrUpdated->email = $data['email'] ?? [];
+        $userCreatedOrUpdated->phone = $data['phone'] ?? [];
+        $userCreatedOrUpdated->custom = $data['custom'] ?? [];
+        $userCreatedOrUpdated->availabilityText = $data['availabilityText'] ?? null;
+        $userCreatedOrUpdated->locale = $data['locale'] ?? null;
+
         return $userCreatedOrUpdated;
     }
 }

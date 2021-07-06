@@ -6,48 +6,55 @@ namespace CarAndClassic\TalkJS\Models;
 
 class User
 {
-    /**
-     * @var string|int
-     */
-    public $id;
+    public string $id;
     
     public string $name;
 
-    public string $welcomeMessage;
+    public ?string $welcomeMessage;
 
-    public string $photoUrl;
+    public ?string $photoUrl;
 
-    public string $role;
+    public ?string $headerPhotoUrl;
 
-    public array $email;
+    public ?string $role;
 
-    public array $phone;
+    public ?array $email;
 
-    public array $custom;
+    public ?array $phone;
 
-    public string $availabilityText;
+    public ?array $custom;
 
-    public string $locale;
+    public ?string $availabilityText;
 
-    public \DateTimeImmutable $createdAt;
+    public ?string $locale;
+
+    public int $createdAt;
 
     public static function createFromArray(array $data): User
     {
-        $timestamp = round($data['createdAt'] / 1000, 0);
-
         $user = new self();
         $user->id = $data['id'];
         $user->name = $data['name'];
-        $user->welcomeMessage = $data['welcomeMessage'];
-        $user->photoUrl = $data['photoUrl'];
-        $user->role = $data['role'];
+        $user->welcomeMessage = $data['welcomeMessage'] ?? null;
+        $user->photoUrl = $data['photoUrl'] ?? null;
+        $user->headerPhotoUrl = $data['headerPhotoUrl'] ?? null;
+        $user->role = $data['role'] ?? null;
         $user->email = $data['email'] ?? [];
         $user->phone = $data['phone'] ?? [];
         $user->custom = $data['custom'] ?? [];
-        $user->availabilityText = $data['availabilityText'];
-        $user->locale = $data['locale'];
-        $user->createdAt = new \DateTimeImmutable("@$timestamp");
+        $user->availabilityText = $data['availabilityText'] ?? null;
+        $user->locale = $data['locale'] ?? null;
+        $user->createdAt = $data['createdAt'];
 
         return $user;
+    }
+
+    public static function createManyFromArray(array $data): array
+    {
+        $users = [];
+        foreach ($data as $user) {
+            $users[$user['id']] = self::createFromArray($user);
+        }
+        return $users;
     }
 }

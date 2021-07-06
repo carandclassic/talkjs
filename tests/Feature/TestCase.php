@@ -2,12 +2,7 @@
 
 declare(strict_types=1);
 
-/*
- * This software may be modified and distributed under the terms
- * of the MIT license. See the LICENSE file for details.
- */
-
-namespace CarAndClassic\TalkJS\Tests\Unit;
+namespace CarAndClassic\TalkJS\Tests\Feature;
 
 use CarAndClassic\TalkJS\Api\TalkJSApi;
 use PHPUnit\Framework\TestCase as BaseTestCase;
@@ -16,9 +11,20 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 
 abstract class TestCase extends BaseTestCase
 {
-    protected array $defaultMockResponseHeaders = [
-        'Content-Type' => 'application/json'
-    ];
+    protected array $defaultMockResponseHeaders;
+
+    protected array $filters;
+
+    protected function setUp(): void
+    {
+        $this->defaultMockResponseHeaders = [
+            'Content-Type' => 'application/json'
+        ];
+        $this->filters = [
+            'limit' => 10,
+            'startingAfter' => 1
+        ];
+    }
 
     public function createApiWithMockHttpClient(array $mockResponses, string $apiClass): TalkJSApi
     {
