@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace CarAndClassic\TalkJS\Tests\Feature;
 
 use CarAndClassic\TalkJS\Api\ConversationApi;
+use CarAndClassic\TalkJS\Events\ConversationCreatedOrUpdated;
+use CarAndClassic\TalkJS\Events\ConversationDeleted;
+use CarAndClassic\TalkJS\Events\ConversationRead;
 use CarAndClassic\TalkJS\Models\Conversation;
-use CarAndClassic\TalkJS\Models\ConversationCreatedOrUpdated;
-use CarAndClassic\TalkJS\Models\ConversationDeleted;
-use CarAndClassic\TalkJS\Models\ConversationRead;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class ConversationTest extends TestCase

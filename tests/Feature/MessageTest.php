@@ -6,9 +6,9 @@ namespace CarAndClassic\TalkJS\Tests\Feature;
 
 use CarAndClassic\TalkJS\Api\MessageApi;
 use CarAndClassic\TalkJS\Enumerations\MessageType;
+use CarAndClassic\TalkJS\Events\MessageCreated;
+use CarAndClassic\TalkJS\Events\MessageDeleted;
 use CarAndClassic\TalkJS\Models\Message;
-use CarAndClassic\TalkJS\Models\MessageCreated;
-use CarAndClassic\TalkJS\Models\MessageDeleted;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class MessageTest extends TestCase

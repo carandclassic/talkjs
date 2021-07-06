@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
 
-namespace CarAndClassic\TalkJS\Models;
+namespace CarAndClassic\TalkJS\Events;
 
-
-class ConversationRead
+abstract class ConversationEvent
 {
     public string $conversationId;
 

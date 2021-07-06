@@ -2,11 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * This software may be modified and distributed under the terms
- * of the MIT license. See the LICENSE file for details.
- */
-
 namespace CarAndClassic\TalkJS;
 
 use CarAndClassic\TalkJS\Api\ConversationApi;
@@ -16,11 +11,11 @@ use Symfony\Component\HttpClient\HttpClient;
 
 final class TalkJSClient
 {
-    public UserApi $userApi;
+    public UserApi $users;
 
-    public ConversationApi $conversationApi;
+    public ConversationApi $conversations;
 
-    public MessageApi $messageApi;
+    public MessageApi $messages;
 
     public function __construct(string $appId, string $secretKey)
     {
@@ -32,8 +27,8 @@ final class TalkJSClient
                 'Accept' => 'application/json'
             ],
         ]);
-        $this->userApi = new UserApi($httpClient);
-        $this->conversationApi = new ConversationApi($httpClient);
-        $this->messageApi = new MessageApi($httpClient);
+        $this->users = new UserApi($httpClient);
+        $this->conversations = new ConversationApi($httpClient);
+        $this->messages = new MessageApi($httpClient);
     }
 }

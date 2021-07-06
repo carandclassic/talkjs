@@ -2,13 +2,9 @@
 
 declare(strict_types=1);
 
-/*
- * This software may be modified and distributed under the terms
- * of the MIT license. See the LICENSE file for details.
- */
-
 namespace CarAndClassic\TalkJS\Api;
 
+use CarAndClassic\TalkJS\Events\UserCreatedOrUpdated;
 use CarAndClassic\TalkJS\Exceptions\Api\BadRequestException;
 use CarAndClassic\TalkJS\Exceptions\Api\NotFoundException;
 use CarAndClassic\TalkJS\Exceptions\Api\TooManyRequestsException;
@@ -16,7 +12,6 @@ use CarAndClassic\TalkJS\Exceptions\Api\UnauthorizedException;
 use CarAndClassic\TalkJS\Exceptions\Api\UnknownErrorException;
 use CarAndClassic\TalkJS\Models\Conversation;
 use CarAndClassic\TalkJS\Models\User;
-use CarAndClassic\TalkJS\Models\UserCreatedOrUpdated;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;

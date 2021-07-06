@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace CarAndClassic\TalkJS\Api;
 
+use CarAndClassic\TalkJS\Events\ConversationCreatedOrUpdated;
+use CarAndClassic\TalkJS\Events\ConversationDeleted;
+use CarAndClassic\TalkJS\Events\ConversationJoined;
+use CarAndClassic\TalkJS\Events\ConversationLeft;
+use CarAndClassic\TalkJS\Events\ConversationRead;
+use CarAndClassic\TalkJS\Events\ParticipationUpdated;
 use CarAndClassic\TalkJS\Exceptions\Api\BadRequestException;
 use CarAndClassic\TalkJS\Exceptions\Api\NotFoundException;
 use CarAndClassic\TalkJS\Exceptions\Api\TooManyRequestsException;
 use CarAndClassic\TalkJS\Exceptions\Api\UnauthorizedException;
 use CarAndClassic\TalkJS\Exceptions\Api\UnknownErrorException;
 use CarAndClassic\TalkJS\Models\Conversation;
-use CarAndClassic\TalkJS\Models\ConversationCreatedOrUpdated;
-use CarAndClassic\TalkJS\Models\ConversationDeleted;
-use CarAndClassic\TalkJS\Models\ConversationRead;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;

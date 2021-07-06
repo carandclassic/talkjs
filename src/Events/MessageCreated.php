@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CarAndClassic\TalkJS\Models;
+namespace CarAndClassic\TalkJS\Events;
 
 use CarAndClassic\TalkJS\Enumerations\MessageType;
 
