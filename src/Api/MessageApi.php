@@ -117,6 +117,15 @@ class MessageApi extends TalkJSApi
         return new MessageCreated($type, $sender, $text, null, $custom);
     }
 
+    public function edit(string $conversationId, string $messageId, string $text, array $custom): MessageEdited
+    {
+        $data = $this->parseResponseData(
+            $this->httpPut("conversations/$conversationId/messages/$messageId", ['text' => $text, 'custom' => $custom])
+        );
+
+        return new MessageEdited($conversationId, $messageId, $text, $custom);
+    }
+
     //TODO: sendFile
 
     public function delete(string $conversationId, string $messageId): MessageDeleted

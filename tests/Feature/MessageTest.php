@@ -8,6 +8,7 @@ use CarAndClassic\TalkJS\Api\MessageApi;
 use CarAndClassic\TalkJS\Enumerations\MessageType;
 use CarAndClassic\TalkJS\Events\MessageCreated;
 use CarAndClassic\TalkJS\Events\MessageDeleted;
+use CarAndClassic\TalkJS\Events\MessageEdited;
 use CarAndClassic\TalkJS\Models\Message;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
@@ -145,6 +146,29 @@ final class MessageTest extends TestCase
         $this->assertEquals($this->senderId, $messageCreated->sender);
         $this->assertEquals($text, $messageCreated->text);
         $this->assertEquals($custom, $messageCreated->custom);
+    }
+
+    public function testEdit(): void
+    {
+        $text = 'Test User Message';
+        $custom = ['test' => 'test'];
+        $api = $this->createApiWithMockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(['data' => []]),
+                    ['response_headers' => $this->defaultMockResponseHeaders]
+                )
+            ],
+            MessageApi::class
+        );
+
+        $messageEdited = $api->edit($this->conversationId, $this->messages[0]['id'], $text, $custom);
+
+        $this->assertInstanceOf(MessageEdited::class, $messageEdited);
+        $this->assertEquals($this->conversationId, $messageEdited->conversationId);
+        $this->assertEquals($this->messages[0]['id'], $messageEdited->messageId);
+        $this->assertEquals($text, $messageEdited->text);
+        $this->assertEquals($custom, $messageEdited->custom);
     }
 
     //TODO: testSendFile
