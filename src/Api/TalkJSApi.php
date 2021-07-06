@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-/*
- * This software may be modified and distributed under the terms
- * of the MIT license. See the LICENSE file for details.
- */
-
 namespace CarAndClassic\TalkJS\Api;
 
-use CarAndClassic\TalkJS\Exceptions\Api as ApiExceptions;
+use CarAndClassic\TalkJS\Exceptions\Api\BadRequestException;
+use CarAndClassic\TalkJS\Exceptions\Api\NotFoundException;
+use CarAndClassic\TalkJS\Exceptions\Api\TooManyRequestsException;
+use CarAndClassic\TalkJS\Exceptions\Api\UnauthorizedException;
+use CarAndClassic\TalkJS\Exceptions\Api\UnknownErrorException;
 use CarAndClassic\TalkJS\Exceptions\LogicException;
 use CarAndClassic\TalkJS\Exceptions\ResponseException;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -119,11 +118,11 @@ abstract class TalkJSApi
     /**
      * @param ResponseInterface $response
      * @return array
-     * @throws ApiExceptions\BadRequestException
-     * @throws ApiExceptions\NotFoundException
-     * @throws ApiExceptions\TooManyRequestsException
-     * @throws ApiExceptions\UnauthorizedException
-     * @throws ApiExceptions\UnknownErrorException
+     * @throws BadRequestException
+     * @throws NotFoundException
+     * @throws TooManyRequestsException
+     * @throws UnauthorizedException
+     * @throws UnknownErrorException
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -134,15 +133,15 @@ abstract class TalkJSApi
         if ($response->getStatusCode() !== 200) {
             switch ($response->getStatusCode()) {
                 case 400:
-                    throw new ApiExceptions\BadRequestException($response);
+                    throw new BadRequestException($response);
                 case 401:
-                    throw new ApiExceptions\UnauthorizedException();
+                    throw new UnauthorizedException();
                 case 404:
-                    throw new ApiExceptions\NotFoundException();
+                    throw new NotFoundException();
                 case 429:
-                    throw new ApiExceptions\TooManyRequestsException();
+                    throw new TooManyRequestsException();
                 default:
-                    throw new ApiExceptions\UnknownErrorException($response);
+                    throw new UnknownErrorException($response);
             }
         }
 
