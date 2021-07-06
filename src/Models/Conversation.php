@@ -25,9 +25,9 @@ class Conversation
     public static function createFromArray(array $data): Conversation
     {
         $user = new self();
-        $user->id = $data['id'];
+        $user->id = (string)$data['id'];
         $user->subject = $data['subject'] ?? null;
-        $user->topicId = $data['topicId'] ?? null;
+        $user->topicId = (string)$data['topicId'] ?? null;
         $user->photoUrl = $data['photoUrl'] ?? null;
         $user->welcomeMessages = $data['welcomeMessages'] ?? null;
         $user->custom = $data['custom'] ?? [];

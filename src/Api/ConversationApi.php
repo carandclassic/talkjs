@@ -2,47 +2,54 @@
 
 declare(strict_types=1);
 
-/*
- * This software may be modified and distributed under the terms
- * of the MIT license. See the LICENSE file for details.
- */
-
 namespace CarAndClassic\TalkJS\Api;
 
+use CarAndClassic\TalkJS\Exceptions\Api\BadRequestException;
+use CarAndClassic\TalkJS\Exceptions\Api\NotFoundException;
+use CarAndClassic\TalkJS\Exceptions\Api\TooManyRequestsException;
+use CarAndClassic\TalkJS\Exceptions\Api\UnauthorizedException;
+use CarAndClassic\TalkJS\Exceptions\Api\UnknownErrorException;
 use CarAndClassic\TalkJS\Models\Conversation;
 use CarAndClassic\TalkJS\Models\ConversationCreatedOrUpdated;
-use CarAndClassic\TalkJS\Models\ConversationJoined;
-use CarAndClassic\TalkJS\Models\ConversationLeft;
-use CarAndClassic\TalkJS\Models\ParticipationUpdated;
-use Exception;
+use CarAndClassic\TalkJS\Models\ConversationDeleted;
+use CarAndClassic\TalkJS\Models\ConversationRead;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class ConversationApi extends TalkJSApi
 {
     /**
-     * @throws Exception|TransportExceptionInterface
+     * @throws UnauthorizedException
+     * @throws TooManyRequestsException
+     * @throws UnknownErrorException
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws BadRequestException
+     * @throws NotFoundException
      */
-    public function createOrUpdate(string $id, array $params): ConversationCreatedOrUpdated
+    public function createOrUpdate(string $id, array $params = []): ConversationCreatedOrUpdated
     {
         $data = $this->parseResponseData($this->httpPut("conversations/$id", $params));
 
-        return new ConversationCreatedOrUpdated();
+        return ConversationCreatedOrUpdated::createFromArray($id, $params);
     }
 
     /**
-     * @throws Exception|TransportExceptionInterface
+     * @throws UnauthorizedException
+     * @throws TooManyRequestsException
+     * @throws UnknownErrorException
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws BadRequestException
+     * @throws NotFoundException
      */
-    public function get(string $id): Conversation
-    {
-        $data = $this->parseResponseData($this->httpGet("conversations/$id"));
-
-        return Conversation::createFromArray($data['data']);
-    }
-
-    /**
-     * @throws Exception|TransportExceptionInterface
-     */
-    public function find(array $filters = []): array
+    public function get(array $filters = []): array
     {
         $data = $this->parseResponseData($this->httpGet('conversations', $filters));
 
@@ -50,36 +57,56 @@ class ConversationApi extends TalkJSApi
     }
 
     /**
-     * @throws Exception|TransportExceptionInterface
+     * @throws UnauthorizedException
+     * @throws TooManyRequestsException
+     * @throws UnknownErrorException
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws BadRequestException
+     * @throws NotFoundException
      */
-    public function join(string $conversationId, string $userId, array $params = []): ConversationJoined
+    public function find(string $id): Conversation
     {
-        $data = $this->parseResponseData(
-            $this->httpPut("conversations/$conversationId/participants/$userId", $params)
-        );
+        $data = $this->parseResponseData($this->httpGet("conversations/$id"));
 
-        return new ConversationJoined();
+        return Conversation::createFromArray($data['data'][0]);
     }
 
     /**
-     * @throws Exception|TransportExceptionInterface
+     * @throws UnauthorizedException
+     * @throws TooManyRequestsException
+     * @throws UnknownErrorException
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws BadRequestException
+     * @throws NotFoundException
      */
-    public function updateParticipation(string $conversationId, string $userId, array $params = []): ParticipationUpdated
+    public function markAsReadBy(string $conversationId, string $userId): ConversationRead
     {
-        $data = $this->parseResponseData(
-            $this->httpPatch("conversations/$conversationId/participants/$userId", $params)
-        );
+        $data = $this->parseResponseData($this->httpPost("conversations/$conversationId/readBy/$userId"));
 
-        return new ParticipationUpdated();
+        return new ConversationRead($conversationId, $userId);
     }
 
     /**
-     * @throws Exception|TransportExceptionInterface
+     * @throws UnauthorizedException
+     * @throws TooManyRequestsException
+     * @throws UnknownErrorException
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws BadRequestException
+     * @throws NotFoundException
      */
-    public function leave(string $conversationId, string $userId): ConversationLeft
+    public function delete(string $id): ConversationDeleted
     {
-        $data = $this->parseResponseData($this->httpDelete("conversations/$conversationId/participants/$userId"));
+        $data = $this->parseResponseData($this->httpDelete("conversations/$id"));
 
-        return new ConversationLeft();
+        return new ConversationDeleted();
     }
 }

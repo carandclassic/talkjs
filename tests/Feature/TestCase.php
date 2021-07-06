@@ -13,14 +13,14 @@ abstract class TestCase extends BaseTestCase
 {
     protected array $defaultMockResponseHeaders;
 
-    protected array $filters;
+    protected array $defaultFilters;
 
     protected function setUp(): void
     {
         $this->defaultMockResponseHeaders = [
             'Content-Type' => 'application/json'
         ];
-        $this->filters = [
+        $this->defaultFilters = [
             'limit' => 10,
             'startingAfter' => 1
         ];
