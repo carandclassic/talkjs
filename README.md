@@ -7,6 +7,15 @@ Forked from [shapintv/talkjs](https://github.com/shapintv/talkjs).
 
 For more information on parameters, custom data, and other things you can send with this API, please see the [TalkJS REST API documentation](https://talkjs.com/docs/Reference/REST_API/Getting_Started/Introduction.html).
 
+The structure of this package is crafted around the TalkJS REST API structure, and as such all the following are treated as distinct APIs:
+
+- Users
+- Conversations
+- Messages
+- Participations
+
+The Notifications API is not implemented yet.
+
 ## Install
 
 Via Composer
@@ -38,6 +47,8 @@ $talkJsClient->userApi->createOrUpdate('my_custom_id', [
 // Retrieve a user
 $user = $talkJsClient->userApi->get('my_custom_id');
 ```
+
+Please note TalkJS currently does not offer a user deletion API, and instead [recommend](https://talkjs.com/dashboard/tLjeWrEK/docs/Reference/REST_API/Users.html#page_Deleting-users) you use the update/edit endpoints to anonymise personally identifiable information. 
 
 ### Conversations
 
