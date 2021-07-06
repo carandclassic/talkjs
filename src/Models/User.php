@@ -18,42 +18,39 @@ class User
 
     public ?string $role;
 
-    public ?array $email;
+    public array $email;
 
-    public ?array $phone;
+    public array $phone;
 
-    public ?array $custom;
+    public array $custom;
 
     public ?string $availabilityText;
 
     public ?string $locale;
 
     public int $createdAt;
-
-    public static function createFromArray(array $data): User
+    
+    public function __construct(array $data)
     {
-        $user = new self();
-        $user->id = (string)$data['id'];
-        $user->name = $data['name'];
-        $user->welcomeMessage = $data['welcomeMessage'] ?? null;
-        $user->photoUrl = $data['photoUrl'] ?? null;
-        $user->headerPhotoUrl = $data['headerPhotoUrl'] ?? null;
-        $user->role = $data['role'] ?? null;
-        $user->email = $data['email'] ?? [];
-        $user->phone = $data['phone'] ?? [];
-        $user->custom = $data['custom'] ?? [];
-        $user->availabilityText = $data['availabilityText'] ?? null;
-        $user->locale = $data['locale'] ?? null;
-        $user->createdAt = $data['createdAt'];
-
-        return $user;
+        $this->id = (string)$data['id'];
+        $this->name = $data['name'];
+        $this->welcomeMessage = $data['welcomeMessage'] ?? null;
+        $this->photoUrl = $data['photoUrl'] ?? null;
+        $this->headerPhotoUrl = $data['headerPhotoUrl'] ?? null;
+        $this->role = $data['role'] ?? null;
+        $this->email = $data['email'] ?? [];
+        $this->phone = $data['phone'] ?? [];
+        $this->custom = $data['custom'] ?? [];
+        $this->availabilityText = $data['availabilityText'] ?? null;
+        $this->locale = $data['locale'] ?? null;
+        $this->createdAt = $data['createdAt'];
     }
 
     public static function createManyFromArray(array $data): array
     {
         $users = [];
         foreach ($data as $user) {
-            $users[$user['id']] = self::createFromArray($user);
+            $users[$user['id']] = new self($user);
         }
         return $users;
     }

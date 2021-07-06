@@ -74,7 +74,7 @@ class ConversationApi extends TalkJSApi
     {
         $data = $this->parseResponseData($this->httpGet("conversations/$id"));
 
-        return Conversation::createFromArray($data['data'][0]);
+        return new Conversation($data['data'][0]);
     }
 
     /**

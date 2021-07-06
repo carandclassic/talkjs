@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace CarAndClassic\TalkJS\Api;
 
 use CarAndClassic\TalkJS\Enumerations\MessageType;
+use CarAndClassic\TalkJS\Events\MessageCreated;
+use CarAndClassic\TalkJS\Events\MessageDeleted;
+use CarAndClassic\TalkJS\Events\MessageEdited;
 use CarAndClassic\TalkJS\Exceptions\Api\BadRequestException;
 use CarAndClassic\TalkJS\Exceptions\Api\NotFoundException;
 use CarAndClassic\TalkJS\Exceptions\Api\TooManyRequestsException;
 use CarAndClassic\TalkJS\Exceptions\Api\UnauthorizedException;
 use CarAndClassic\TalkJS\Exceptions\Api\UnknownErrorException;
 use CarAndClassic\TalkJS\Models\Message;
-use CarAndClassic\TalkJS\Models\MessageCreated;
-use CarAndClassic\TalkJS\Models\MessageDeleted;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -69,7 +70,7 @@ class MessageApi extends TalkJSApi
      */
     public function createSystemMessage(string $conversationId, string $text, array $custom = []): MessageCreated
     {
-        return $this->createMessage(MessageType::SYSTEM, $conversationId, $text, $custom);
+        return $this->createMessage(MessageType::SYSTEM, $conversationId, $text, null, $custom);
     }
 
     /**
@@ -85,7 +86,7 @@ class MessageApi extends TalkJSApi
      */
     public function createUserMessage(string $conversationId, string $sender, string $text, array $custom = []): MessageCreated
     {
-        return $this->createMessage(MessageType::USER, $conversationId, $text, $custom, $sender);
+        return $this->createMessage(MessageType::USER, $conversationId, $text, $sender, $custom);
     }
 
     /**
@@ -99,7 +100,7 @@ class MessageApi extends TalkJSApi
      * @throws BadRequestException
      * @throws NotFoundException
      */
-    private function createMessage(string $type, string $conversationId, string $text, array $custom = [], ?string $sender = null): MessageCreated
+    private function createMessage(string $type, string $conversationId, string $text, ?string $sender = null, array $custom = []): MessageCreated
     {
         $body = [
             'type' => $type,

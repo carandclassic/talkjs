@@ -12,21 +12,19 @@ class ConversationCreatedOrUpdated
 
     public string $subject;
 
-    public ?array $welcomeMessages;
+    public array $welcomeMessages;
 
-    public ?array $custom;
+    public array $custom;
 
     public ?string $photoUrl;
-
-    public static function createFromArray(string $id, array $data): ConversationCreatedOrUpdated
+    
+    public function __construct(string $id, array $data)
     {
-        $conversationUpdatedOrCreated = new self();
-        $conversationUpdatedOrCreated->id = $id;
-        $conversationUpdatedOrCreated->participants = $data['participants'] ?? [];
-        $conversationUpdatedOrCreated->subject = $data['subject'];
-        $conversationUpdatedOrCreated->welcomeMessages = $data['welcomeMessages'] ?? [];
-        $conversationUpdatedOrCreated->custom = $data['custom'] ?? [];
-        $conversationUpdatedOrCreated->photoUrl = $data['photoUrl'] ?? null;
-        return $conversationUpdatedOrCreated;
+        $this->id = $id;
+        $this->participants = $data['participants'] ?? [];
+        $this->subject = $data['subject'];
+        $this->welcomeMessages = $data['welcomeMessages'] ?? [];
+        $this->custom = $data['custom'] ?? [];
+        $this->photoUrl = $data['photoUrl'] ?? null;
     }
 }

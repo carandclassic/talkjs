@@ -29,30 +29,27 @@ class Message
     public ?string $attachment;
 
     public int $createdAt;
-
-    public static function createFromArray(array $data): self
+    
+    public function __construct(array $data)
     {
-        $message = new self();
-        $message->id = (string)$data['id'];
-        $message->type = $data['type'];
-        $message->sender = $data['sender'] ?? null;
-        $message->conversationId = (string)$data['conversationId'];
-        $message->text = $data['text'];
-        $message->readBy = $data['readBy'];
-        $message->origin = $data['origin'];
-        $message->location = $data['location'] ?? null;
-        $message->custom = $data['custom'];
-        $message->createdAt = $data['createdAt'];
-        $message->attachment = $data['attachment'] ?? null;
-
-        return $message;
+        $this->id = (string)$data['id'];
+        $this->type = $data['type'];
+        $this->sender = $data['sender'] ?? null;
+        $this->conversationId = (string)$data['conversationId'];
+        $this->text = $data['text'];
+        $this->readBy = $data['readBy'];
+        $this->origin = $data['origin'];
+        $this->location = $data['location'] ?? null;
+        $this->custom = $data['custom'];
+        $this->attachment = $data['attachment'] ?? null;
+        $this->createdAt = $data['createdAt'];
     }
 
     public static function createManyFromArray(array $data): array
     {
         $messages = [];
         foreach ($data as $message) {
-            $messages[] = self::createFromArray($message);
+            $messages[$data['id']] = new self($message);
         }
         return $messages;
     }

@@ -14,34 +14,31 @@ class Conversation
 
     public ?string $photoUrl;
 
-    public ?array $welcomeMessages;
+    public array $welcomeMessages;
 
-    public ?array $custom;
+    public array $custom;
 
     public array $participants;
 
     public int $createdAt;
-
-    public static function createFromArray(array $data): Conversation
+    
+    public function __construct(array $data)
     {
-        $user = new self();
-        $user->id = (string)$data['id'];
-        $user->subject = $data['subject'] ?? null;
-        $user->topicId = (string)$data['topicId'] ?? null;
-        $user->photoUrl = $data['photoUrl'] ?? null;
-        $user->welcomeMessages = $data['welcomeMessages'] ?? null;
-        $user->custom = $data['custom'] ?? [];
-        $user->participants = $data['participants'] ?? [];
-        $user->createdAt = $data['createdAt'];
-
-        return $user;
+        $this->id = (string)$data['id'];
+        $this->subject = $data['subject'] ?? null;
+        $this->topicId = (string)$data['topicId'] ?? null;
+        $this->photoUrl = $data['photoUrl'] ?? null;
+        $this->welcomeMessages = $data['welcomeMessages'] ?? [];
+        $this->custom = $data['custom'] ?? [];
+        $this->participants = $data['participants'] ?? [];
+        $this->createdAt = $data['createdAt'];
     }
 
     public static function createManyFromArray(array $data): array
     {
         $conversations = [];
         foreach ($data as $conversation) {
-            $conversations[$conversation['id']] = self::createFromArray($conversation);
+            $conversations[$conversation['id']] = new self($conversation);
         }
         return $conversations;
     }

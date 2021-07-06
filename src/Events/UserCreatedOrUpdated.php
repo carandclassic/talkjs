@@ -10,7 +10,7 @@ class UserCreatedOrUpdated
 
     public string $name;
 
-    public ?array $email;
+    public array $email;
 
     public ?string $welcomeMessage;
 
@@ -20,9 +20,9 @@ class UserCreatedOrUpdated
 
     public ?string $role;
 
-    public ?array $phone;
+    public array $phone;
 
-    public ?array $custom;
+    public array $custom;
 
     public ?string $availabilityText;
 
