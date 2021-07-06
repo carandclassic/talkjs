@@ -17,6 +17,7 @@ use CarAndClassic\TalkJS\Exceptions\Api\UnauthorizedException;
 use CarAndClassic\TalkJS\Exceptions\Api\UnknownErrorException;
 use CarAndClassic\TalkJS\Models\Message;
 use CarAndClassic\TalkJS\Models\MessageCreated;
+use CarAndClassic\TalkJS\Models\MessageDeleted;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -121,4 +122,13 @@ class MessageApi extends TalkJSApi
     }
 
     //TODO: sendFile
+
+    public function delete(string $conversationId, string $messageId): MessageDeleted
+    {
+        $data = $this->parseResponseData(
+            $this->httpDelete("conversations/$conversationId/messages/$messageId")
+        );
+
+        return new MessageDeleted();
+    }
 }

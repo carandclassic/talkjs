@@ -13,6 +13,7 @@ use CarAndClassic\TalkJS\Api\MessageApi;
 use CarAndClassic\TalkJS\Enumerations\MessageType;
 use CarAndClassic\TalkJS\Models\Message;
 use CarAndClassic\TalkJS\Models\MessageCreated;
+use CarAndClassic\TalkJS\Models\MessageDeleted;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class MessageTest extends TestCase
@@ -149,5 +150,24 @@ final class MessageTest extends TestCase
         $this->assertEquals($this->senderId, $messageCreated->sender);
         $this->assertEquals($text, $messageCreated->text);
         $this->assertEquals($custom, $messageCreated->custom);
+    }
+
+    //TODO: testSendFile
+
+    public function testDelete(): void
+    {
+        $api = $this->createApiWithMockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(['data' => []]),
+                    ['response_headers' => $this->defaultMockResponseHeaders]
+                )
+            ],
+            MessageApi::class
+        );
+
+        $messageDeleted = $api->delete($this->conversationId, $this->messages[0]['id']);
+
+        $this->assertInstanceOf(MessageDeleted::class, $messageDeleted);
     }
 }
