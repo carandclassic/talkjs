@@ -32,9 +32,7 @@ final class UserTest extends TestCase
             'role' => 'user',
             'email' => ['testuser@example.com'],
             'phone' => ['+11234567890'],
-            'custom' => [
-                'test' => 'test'
-            ],
+            'custom' => ['test' => 'test'],
             'availabilityText' => 'testAvailable',
             'locale' => 'GB',
             'createdAt' => $createdAt
@@ -46,9 +44,26 @@ final class UserTest extends TestCase
                 'topicId' => 'Test Topic 1',
                 'photoUrl' => null,
                 'welcomeMessages' => ['Test Welcome Message'],
-                'custom' => [
-                    'test' => 'test'
+                'custom' => ['test' => 'test'],
+                'participants' => [
+                    $this->userId => [
+                        'access' => 'ReadWrite',
+                        'notify' => true
+                    ],
+                    $this->userId . '2' => [
+                        'access' => 'Read',
+                        'notify' => false
+                    ]
                 ],
+                'createdAt' => $createdAt
+            ],
+            [
+                'id' => 'testConversationId2',
+                'subject' => 'Test Conversation 2',
+                'topicId' => 'Test Topic 2',
+                'photoUrl' => null,
+                'welcomeMessages' => ['Test Welcome Message'],
+                'custom' => ['test' => 'test'],
                 'participants' => [
                     $this->userId => [
                         'access' => 'ReadWrite',
@@ -103,7 +118,7 @@ final class UserTest extends TestCase
             UserApi::class
         );
 
-        $users = $api->get($this->filters);
+        $users = $api->get($this->defaultFilters);
 
         foreach ($users as $user) {
             $this->assertInstanceOf(User::class, $user);

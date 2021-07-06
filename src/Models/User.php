@@ -33,7 +33,7 @@ class User
     public static function createFromArray(array $data): User
     {
         $user = new self();
-        $user->id = $data['id'];
+        $user->id = (string)$data['id'];
         $user->name = $data['name'];
         $user->welcomeMessage = $data['welcomeMessage'] ?? null;
         $user->photoUrl = $data['photoUrl'] ?? null;
