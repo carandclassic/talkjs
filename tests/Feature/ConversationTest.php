@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace CarAndClassic\TalkJS\Tests\Feature;
 
 use CarAndClassic\TalkJS\Api\ConversationApi;
+use CarAndClassic\TalkJS\Enumerations\ConversationAccess;
 use CarAndClassic\TalkJS\Events\ConversationCreatedOrUpdated;
 use CarAndClassic\TalkJS\Events\ConversationDeleted;
+use CarAndClassic\TalkJS\Events\ConversationJoined;
+use CarAndClassic\TalkJS\Events\ConversationLeft;
 use CarAndClassic\TalkJS\Events\ConversationRead;
+use CarAndClassic\TalkJS\Events\ParticipationUpdated;
 use CarAndClassic\TalkJS\Models\Conversation;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
@@ -162,6 +166,72 @@ final class ConversationTest extends TestCase
         $this->assertInstanceOf(ConversationRead::class, $conversationRead);
         $this->assertEquals($this->conversations[0]['id'], $conversationRead->conversationId);
         $this->assertEquals($this->userIds[0], $conversationRead->userId);
+    }
+
+    public function testJoin(): void
+    {
+        $api = $this->createApiWithMockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(['data' => []]),
+                    ['response_headers' => $this->defaultMockResponseHeaders]
+                )
+            ],
+            ConversationApi::class
+        );
+
+        $conversationJoined = $api->join($this->conversations[0]['id'], $this->userIds[0], ConversationAccess::READ, false);
+
+        $this->assertInstanceOf(ConversationJoined::class, $conversationJoined);
+        $this->assertEquals($this->conversations[0]['id'], $conversationJoined->conversationId);
+        $this->assertEquals($this->userIds[0], $conversationJoined->userId);
+        $this->assertEquals(ConversationAccess::READ, $conversationJoined->access);
+        $this->assertEquals(false, $conversationJoined->notify);
+    }
+
+    public function testUpdateParticipation(): void
+    {
+        $api = $this->createApiWithMockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(['data' => []]),
+                    ['response_headers' => $this->defaultMockResponseHeaders]
+                )
+            ],
+            ConversationApi::class
+        );
+
+        $participationUpdated = $api->updateParticipation(
+            $this->conversations[0]['id'],
+            $this->userIds[0],
+            ConversationAccess::READ,
+            false
+        );
+
+        $this->assertInstanceOf(ParticipationUpdated::class, $participationUpdated);
+        $this->assertEquals($this->conversations[0]['id'], $participationUpdated->conversationId);
+        $this->assertEquals($this->userIds[0], $participationUpdated->userId);
+        $this->assertEquals(ConversationAccess::READ, $participationUpdated->access);
+        $this->assertEquals(false, $participationUpdated->notify);
+    }
+
+    public function testLeave(): void
+    {
+        $api = $this->createApiWithMockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(['data' => []]),
+                    ['response_headers' => $this->defaultMockResponseHeaders]
+                )
+            ],
+            ConversationApi::class
+        );
+
+        $conversationLeft = $api->leave($this->conversations[0]['id'], $this->userIds[0]);
+
+        $this->assertInstanceOf(ConversationLeft::class, $conversationLeft);
+        $this->assertEquals($this->conversations[0]['id'], $conversationLeft->conversationId);
+        $this->assertEquals($this->userIds[0], $conversationLeft->userId);
     }
 
     public function testDelete(): void

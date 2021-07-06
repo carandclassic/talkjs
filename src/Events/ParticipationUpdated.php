@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace CarAndClassic\TalkJS\Events;
 
-use CarAndClassic\TalkJS\Enumerations\ConversationPermission;
-
 class ParticipationUpdated
 {
     public string $conversationId;
@@ -16,11 +14,11 @@ class ParticipationUpdated
 
     public bool $notify;
     
-    public function __construct(string $conversationId, string $userId, array $data)
+    public function __construct(string $conversationId, string $userId, string $access, bool $notify)
     {
         $this->conversationId = $conversationId;
         $this->userId = $userId;
-        $this->access = $data['access'] ?? ConversationPermission::READ_WRITE;
-        $this->notify = $data['notify'] ?? true;
+        $this->access = $access;
+        $this->notify = $notify;
     }
 }
