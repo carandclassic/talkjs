@@ -7,7 +7,7 @@ declare(strict_types=1);
  * of the MIT license. See the LICENSE file for details.
  */
 
-namespace CarAndClassic\TalkJS\Tests\Unit;
+namespace CarAndClassic\TalkJS\Tests\Feature;
 
 use CarAndClassic\TalkJS\Api\MessageApi;
 use CarAndClassic\TalkJS\Enumerations\MessageType;
@@ -25,14 +25,15 @@ final class MessageTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->conversationId = 'testConversationId';
         $this->senderId = 'testSenderId';
         $this->messages = [
             [
-                'id' => 2, // At time of writing results are returned descending
+                'id' => '2', // At time of writing results are returned descending
                 'type' => MessageType::USER,
                 'conversationId' => $this->conversationId,
-                'senderId' => $this->senderId,
+                'sender' => $this->senderId,
                 'text' => 'Test User Message',
                 'readBy' => [],
                 'origin' => 'rest',
@@ -42,10 +43,10 @@ final class MessageTest extends TestCase
                 'attachment' => null
             ],
             [
-                'id' => 1,
+                'id' => '1',
                 'type' => MessageType::SYSTEM,
                 'conversationId' => $this->conversationId,
-                'senderId' => null,
+                'sender' => null,
                 'text' => 'Test System Message',
                 'readBy' => [],
                 'origin' => 'rest',
@@ -57,7 +58,7 @@ final class MessageTest extends TestCase
         ];
     }
 
-    public function testFindMessages(): void
+    public function testGet(): void
     {
         $api = $this->createApiWithMockHttpClient(
             [
@@ -69,7 +70,8 @@ final class MessageTest extends TestCase
             MessageApi::class
         );
 
-        $messages = $api->findMessages($this->conversationId);
+        $messages = $api->get($this->conversationId);
+
         $this->assertIsArray($messages);
         $this->assertCount(2, $messages);
         foreach ($messages as $message) {
@@ -79,26 +81,31 @@ final class MessageTest extends TestCase
         $this->assertTrue($messages[1]->isSystemMessage());
     }
 
-    public function testPostSystemMessage(): void
+    public function testFind(): void
     {
         $api = $this->createApiWithMockHttpClient(
             [
                 new MockResponse(
-                    json_encode(['data' => []]),
+                    json_encode(['data' => $this->messages[0]]),
                     ['response_headers' => $this->defaultMockResponseHeaders]
                 )
             ],
             MessageApi::class
         );
 
-        $messageCreated = $api
-            ->postSystemMessage($this->conversationId, 'Test System Message', ['test' => 'test']);
-        $this->assertInstanceOf(MessageCreated::class, $messageCreated);
-        $this->assertTrue($messageCreated->isSystemMessage());
+        $message = $api->find($this->conversationId, $this->messages[0]['id']);
+
+        $this->assertInstanceOf(Message::class, $message);
+        foreach ($this->messages[0] as $key => $value)
+        {
+            $this->assertEquals($value, $message->$key);
+        }
     }
 
-    public function testPostUserMessage(): void
+    public function testCreateSystemMessage(): void
     {
+        $text = 'Test System Message';
+        $custom = ['test' => 'test'];
         $api = $this->createApiWithMockHttpClient(
             [
                 new MockResponse(
@@ -108,9 +115,39 @@ final class MessageTest extends TestCase
             ],
             MessageApi::class
         );
+
         $messageCreated = $api
-            ->postUserMessage($this->conversationId, $this->senderId, 'Test System Message', ['test' => 'test']);
+            ->createSystemMessage($this->conversationId, $text, $custom);
+
+        $this->assertInstanceOf(MessageCreated::class, $messageCreated);
+        $this->assertTrue($messageCreated->isSystemMessage());
+        $this->assertEquals(null, $messageCreated->sender);
+        $this->assertEquals($text, $messageCreated->text);
+        $this->assertEquals($custom, $messageCreated->custom);
+
+    }
+
+    public function testCreateUserMessage(): void
+    {
+        $text = 'Test User Message';
+        $custom = ['test' => 'test'];
+        $api = $this->createApiWithMockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(['data' => []]),
+                    ['response_headers' => $this->defaultMockResponseHeaders]
+                )
+            ],
+            MessageApi::class
+        );
+
+        $messageCreated = $api
+            ->createUserMessage($this->conversationId, $this->senderId, $text, $custom);
+
         $this->assertInstanceOf(MessageCreated::class, $messageCreated);
         $this->assertTrue($messageCreated->isUserMessage());
+        $this->assertEquals($this->senderId, $messageCreated->sender);
+        $this->assertEquals($text, $messageCreated->text);
+        $this->assertEquals($custom, $messageCreated->custom);
     }
 }

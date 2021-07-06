@@ -8,16 +8,13 @@ use CarAndClassic\TalkJS\Enumerations\MessageType;
 
 class Message
 {
-    /**
-     * @var string|int
-     */
-    public $id;
+    public string $id;
 
     public string $type;
 
     public string $conversationId;
 
-    public ?string $senderId;
+    public ?string $sender;
 
     public string $text;
 
@@ -29,25 +26,23 @@ class Message
 
     public array $custom;
 
-    public \DateTimeImmutable $createdAt;
-
     public ?string $attachment;
+
+    public int $createdAt;
 
     public static function createFromArray(array $data): self
     {
-        $timestamp = round($data['createdAt'] / 1000, 0);
-
         $message = new self();
-        $message->id = $data['id'];
+        $message->id = (string)$data['id'];
         $message->type = $data['type'];
-        $message->senderId = $data['senderId'] ?? null;
-        $message->conversationId = $data['conversationId'];
+        $message->sender = $data['sender'] ?? null;
+        $message->conversationId = (string)$data['conversationId'];
         $message->text = $data['text'];
         $message->readBy = $data['readBy'];
         $message->origin = $data['origin'];
         $message->location = $data['location'] ?? null;
         $message->custom = $data['custom'];
-        $message->createdAt = new \DateTimeImmutable("@$timestamp");
+        $message->createdAt = $data['createdAt'];
         $message->attachment = $data['attachment'] ?? null;
 
         return $message;
@@ -56,11 +51,9 @@ class Message
     public static function createManyFromArray(array $data): array
     {
         $messages = [];
-
         foreach ($data as $message) {
             $messages[] = self::createFromArray($message);
         }
-
         return $messages;
     }
 

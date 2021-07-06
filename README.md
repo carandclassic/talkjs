@@ -14,7 +14,10 @@ The structure of this package is crafted around the TalkJS REST API structure, a
 - Messages
 - Participations
 
-The Notifications API is not implemented yet.
+Not implemented currently:
+
+- Notifications
+- Sending file Messages
 
 ## Install
 
