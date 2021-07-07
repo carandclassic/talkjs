@@ -84,9 +84,9 @@ class MessageApi extends TalkJSApi
      * @throws BadRequestException
      * @throws NotFoundException
      */
-    public function createUserMessage(string $conversationId, string $sender, string $text, array $custom = []): MessageCreated
+    public function createUserMessage(string $conversationId, string $senderId, string $text, array $custom = []): MessageCreated
     {
-        return $this->createMessage(MessageType::USER, $conversationId, $text, $sender, $custom);
+        return $this->createMessage(MessageType::USER, $conversationId, $text, $senderId, $custom);
     }
 
     /**
@@ -100,21 +100,21 @@ class MessageApi extends TalkJSApi
      * @throws BadRequestException
      * @throws NotFoundException
      */
-    private function createMessage(string $type, string $conversationId, string $text, ?string $sender = null, array $custom = []): MessageCreated
+    private function createMessage(string $type, string $conversationId, string $text, ?string $senderId = null, array $custom = []): MessageCreated
     {
         $body = [
             'type' => $type,
             'text' => $text,
             'custom' => (object) $custom,
         ];
-        if ($type === MessageType::USER || isset($sender)) {
-            $body['sender'] = $sender;
+        if ($type === MessageType::USER || isset($senderId)) {
+            $body['senderId'] = $senderId;
         }
         $data = $this->parseResponseData(
             $this->httpPost("conversations/$conversationId/messages", [$body])
         );
 
-        return new MessageCreated($type, $sender, $text, null, $custom);
+        return new MessageCreated($type, $senderId, $text, null, $custom);
     }
 
     public function edit(string $conversationId, string $messageId, string $text, array $custom): MessageEdited

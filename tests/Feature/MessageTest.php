@@ -30,7 +30,7 @@ final class MessageTest extends TestCase
                 'id' => '2', // At time of writing results are returned descending
                 'type' => MessageType::USER,
                 'conversationId' => $this->conversationId,
-                'sender' => $this->senderId,
+                'senderId' => $this->senderId,
                 'text' => 'Test User Message',
                 'readBy' => [],
                 'origin' => 'rest',
@@ -43,7 +43,7 @@ final class MessageTest extends TestCase
                 'id' => '1',
                 'type' => MessageType::SYSTEM,
                 'conversationId' => $this->conversationId,
-                'sender' => null,
+                'senderId' => null,
                 'text' => 'Test System Message',
                 'readBy' => [],
                 'origin' => 'rest',
@@ -117,7 +117,7 @@ final class MessageTest extends TestCase
 
         $this->assertInstanceOf(MessageCreated::class, $messageCreated);
         $this->assertTrue($messageCreated->isSystemMessage());
-        $this->assertEquals(null, $messageCreated->sender);
+        $this->assertEquals(null, $messageCreated->senderId);
         $this->assertEquals($text, $messageCreated->text);
         $this->assertEquals($custom, $messageCreated->custom);
 
@@ -142,7 +142,7 @@ final class MessageTest extends TestCase
 
         $this->assertInstanceOf(MessageCreated::class, $messageCreated);
         $this->assertTrue($messageCreated->isUserMessage());
-        $this->assertEquals($this->senderId, $messageCreated->sender);
+        $this->assertEquals($this->senderId, $messageCreated->senderId);
         $this->assertEquals($text, $messageCreated->text);
         $this->assertEquals($custom, $messageCreated->custom);
     }

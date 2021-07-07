@@ -14,7 +14,7 @@ class Message
 
     public string $conversationId;
 
-    public ?string $sender;
+    public ?string $senderId;
 
     public string $text;
 
@@ -34,7 +34,7 @@ class Message
     {
         $this->id = (string)$data['id'];
         $this->type = $data['type'];
-        $this->sender = $data['sender'] ?? null;
+        $this->senderId = $data['senderId'] ?? null;
         $this->conversationId = (string)$data['conversationId'];
         $this->text = $data['text'];
         $this->readBy = $data['readBy'];
