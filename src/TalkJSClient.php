@@ -20,7 +20,7 @@ final class TalkJSClient
     public function __construct(string $appId, string $secretKey)
     {
         $httpClient = HttpClient::create([
-            'base_uri' => 'https://api.talkjs.com/v1/'.$appId.'/',
+            'base_uri' => 'https://api.talkjs.com/v1/' . $appId . '/',
             'auth_bearer' => $secretKey,
             'headers' => [
                 'Content-Type' => 'application/json',

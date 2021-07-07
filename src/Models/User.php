@@ -7,7 +7,7 @@ namespace CarAndClassic\TalkJS\Models;
 class User
 {
     public string $id;
-    
+
     public string $name;
 
     public ?string $welcomeMessage;
@@ -29,7 +29,7 @@ class User
     public ?string $locale;
 
     public int $createdAt;
-    
+
     public function __construct(array $data)
     {
         $this->id = (string)$data['id'];

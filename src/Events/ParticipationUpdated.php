@@ -13,7 +13,7 @@ class ParticipationUpdated
     public string $access;
 
     public bool $notify;
-    
+
     public function __construct(string $conversationId, string $userId, string $access, bool $notify)
     {
         $this->conversationId = $conversationId;

@@ -29,7 +29,7 @@ class Message
     public ?string $attachment;
 
     public int $createdAt;
-    
+
     public function __construct(array $data)
     {
         $this->id = (string)$data['id'];

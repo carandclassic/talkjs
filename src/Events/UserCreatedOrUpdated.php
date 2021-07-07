@@ -27,7 +27,7 @@ class UserCreatedOrUpdated
     public ?string $availabilityText;
 
     public ?string $locale;
-    
+
     public function __construct(string $id, array $data)
     {
         $this->id = $id;

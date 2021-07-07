@@ -21,7 +21,7 @@ class Conversation
     public array $participants;
 
     public int $createdAt;
-    
+
     public function __construct(array $data)
     {
         $this->id = (string)$data['id'];

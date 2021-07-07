@@ -92,7 +92,6 @@ abstract class TalkJSApi
             $dataKey => $params,
             'headers' => $requestHeaders,
         ]);
-
     }
 
     /**
@@ -109,7 +108,7 @@ abstract class TalkJSApi
         $body = json_encode($params);
 
         if (!\is_string($body)) {
-            throw new LogicException('An error occurred when encoding body: '.json_last_error_msg());
+            throw new LogicException('An error occurred when encoding body: ' . json_last_error_msg());
         }
 
         return $body;

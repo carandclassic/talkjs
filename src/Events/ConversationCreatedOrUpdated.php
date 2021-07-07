@@ -17,7 +17,7 @@ class ConversationCreatedOrUpdated
     public array $custom;
 
     public ?string $photoUrl;
-    
+
     public function __construct(string $id, array $data)
     {
         $this->id = $id;
