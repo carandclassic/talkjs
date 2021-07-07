@@ -2,43 +2,92 @@
 
 declare(strict_types=1);
 
-/*
- * This software may be modified and distributed under the terms
- * of the MIT license. See the LICENSE file for details.
- */
-
 namespace CarAndClassic\TalkJS\Api;
 
-use CarAndClassic\TalkJS\Exception;
-use CarAndClassic\TalkJS\Model;
+use CarAndClassic\TalkJS\Events\UserCreatedOrUpdated;
+use CarAndClassic\TalkJS\Exceptions\Api\BadRequestException;
+use CarAndClassic\TalkJS\Exceptions\Api\NotFoundException;
+use CarAndClassic\TalkJS\Exceptions\Api\TooManyRequestsException;
+use CarAndClassic\TalkJS\Exceptions\Api\UnauthorizedException;
+use CarAndClassic\TalkJS\Exceptions\Api\UnknownErrorException;
+use CarAndClassic\TalkJS\Models\Conversation;
+use CarAndClassic\TalkJS\Models\User;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-final class UserApi extends TalkJSApi
+class UserApi extends TalkJSApi
 {
     /**
-     * @throws Exception
+     * @throws UnauthorizedException
+     * @throws TooManyRequestsException
+     * @throws UnknownErrorException
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws BadRequestException
+     * @throws NotFoundException
      */
-    public function createOrUpdate(string $id, array $params)
+    public function createOrUpdate(string $id, array $params): UserCreatedOrUpdated
     {
-        $response = $this->httpPut("users/$id", $params);
+        $data = $this->parseResponseData($this->httpPut("users/$id", $params));
 
-        if (200 !== $response->getStatusCode()) {
-            $this->handleErrors($response);
-        }
-
-        return $this->hydrator->hydrate($response, Model\User\UserCreatedOrUpdated::class);
+        return new UserCreatedOrUpdated($id, $params);
     }
 
     /**
-     * @throws Exception
+     * @throws UnauthorizedException
+     * @throws TooManyRequestsException
+     * @throws UnknownErrorException
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws BadRequestException
+     * @throws NotFoundException
      */
-    public function get(string $id)
+    public function get(array $filters): array
     {
-        $response = $this->httpGet("users/$id");
+        $data = $this->parseResponseData($this->httpGet("users/", $filters));
 
-        if (200 !== $response->getStatusCode()) {
-            $this->handleErrors($response);
-        }
+        return User::createManyFromArray($data['data']);
+    }
 
-        return $this->hydrator->hydrate($response, Model\User\User::class);
+    /**
+     * @throws UnauthorizedException
+     * @throws TooManyRequestsException
+     * @throws UnknownErrorException
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws BadRequestException
+     * @throws NotFoundException
+     */
+    public function find(string $id): User
+    {
+        $data = $this->parseResponseData($this->httpGet("users/$id"));
+
+        return new User($data['data'][0]);
+    }
+
+    /**
+     * @throws UnauthorizedException
+     * @throws TooManyRequestsException
+     * @throws UnknownErrorException
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws BadRequestException
+     * @throws NotFoundException
+     */
+    public function getConversations(string $id): array
+    {
+        $data = $this->parseResponseData($this->httpGet("users/$id/conversations/"));
+
+        return Conversation::createManyFromArray($data['data']);
     }
 }

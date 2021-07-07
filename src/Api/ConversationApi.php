@@ -2,154 +2,175 @@
 
 declare(strict_types=1);
 
-/*
- * This software may be modified and distributed under the terms
- * of the MIT license. See the LICENSE file for details.
- */
-
 namespace CarAndClassic\TalkJS\Api;
 
-use CarAndClassic\TalkJS\Exception;
-use CarAndClassic\TalkJS\Model;
+use CarAndClassic\TalkJS\Enumerations\ConversationAccess;
+use CarAndClassic\TalkJS\Events\ConversationCreatedOrUpdated;
+use CarAndClassic\TalkJS\Events\ConversationDeleted;
+use CarAndClassic\TalkJS\Events\ConversationJoined;
+use CarAndClassic\TalkJS\Events\ConversationLeft;
+use CarAndClassic\TalkJS\Events\ConversationRead;
+use CarAndClassic\TalkJS\Events\ParticipationUpdated;
+use CarAndClassic\TalkJS\Exceptions\Api\BadRequestException;
+use CarAndClassic\TalkJS\Exceptions\Api\NotFoundException;
+use CarAndClassic\TalkJS\Exceptions\Api\TooManyRequestsException;
+use CarAndClassic\TalkJS\Exceptions\Api\UnauthorizedException;
+use CarAndClassic\TalkJS\Exceptions\Api\UnknownErrorException;
+use CarAndClassic\TalkJS\Models\Conversation;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-final class ConversationApi extends TalkJSApi
+class ConversationApi extends TalkJSApi
 {
     /**
-     * @throws Exception
+     * @throws UnauthorizedException
+     * @throws TooManyRequestsException
+     * @throws UnknownErrorException
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws BadRequestException
+     * @throws NotFoundException
      */
-    public function createOrUpdate(string $id, array $params)
+    public function createOrUpdate(string $id, array $params = []): ConversationCreatedOrUpdated
     {
-        $response = $this->httpPut("conversations/$id", $params);
+        $data = $this->parseResponseData($this->httpPut("conversations/$id", $params));
 
-        if (200 !== $response->getStatusCode()) {
-            $this->handleErrors($response);
-        }
-
-        return $this->hydrator->hydrate($response, Model\Conversation\ConversationCreatedOrUpdated::class);
+        return new ConversationCreatedOrUpdated($id, $params);
     }
 
     /**
-     * @throws Exception
+     * @throws UnauthorizedException
+     * @throws TooManyRequestsException
+     * @throws UnknownErrorException
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws BadRequestException
+     * @throws NotFoundException
      */
-    public function get(string $id)
+    public function get(array $filters = []): array
     {
-        $response = $this->httpGet("conversations/$id");
+        $data = $this->parseResponseData($this->httpGet('conversations', $filters));
 
-        if (200 !== $response->getStatusCode()) {
-            $this->handleErrors($response);
-        }
-
-        return $this->hydrator->hydrate($response, Model\Conversation\Conversation::class);
+        return Conversation::createManyFromArray($data['data']);
     }
 
     /**
-     * @throws Exception
+     * @throws UnauthorizedException
+     * @throws TooManyRequestsException
+     * @throws UnknownErrorException
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws BadRequestException
+     * @throws NotFoundException
      */
-    public function find(array $filters = []): Model\Conversation\ConversationCollection
+    public function find(string $id): Conversation
     {
-        $response = $this->httpGet('conversations', $filters);
+        $data = $this->parseResponseData($this->httpGet("conversations/$id"));
 
-        if (200 !== $response->getStatusCode()) {
-            $this->handleErrors($response);
-        }
-
-        return $this->hydrator->hydrate($response, Model\Conversation\ConversationCollection::class);
+        return new Conversation($data['data'][0]);
     }
 
     /**
-     * @throws Exception
+     * @throws UnauthorizedException
+     * @throws TooManyRequestsException
+     * @throws UnknownErrorException
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws BadRequestException
+     * @throws NotFoundException
      */
-    public function join(string $conversationId, string $userId, array $params = [])
+    public function markAsReadBy(string $conversationId, string $userId): ConversationRead
     {
-        $response = $this->httpPut("conversations/$conversationId/participants/$userId", $params);
+        $data = $this->parseResponseData($this->httpPost("conversations/$conversationId/readBy/$userId"));
 
-        if (200 !== $response->getStatusCode()) {
-            $this->handleErrors($response);
-        }
-
-        return $this->hydrator->hydrate($response, Model\Conversation\ConversationJoined::class);
+        return new ConversationRead($conversationId, $userId);
     }
 
     /**
-     * @throws Exception
+     * @throws UnauthorizedException
+     * @throws TooManyRequestsException
+     * @throws UnknownErrorException
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws BadRequestException
+     * @throws NotFoundException
      */
-    public function updateParticipation(string $conversationId, string $userId, array $params = [])
+    public function join(string $conversationId, string $userId, ?string $access = null, bool $notify = true): ConversationJoined
     {
-        $response = $this->httpPatch("conversations/$conversationId/participants/$userId", $params);
+        $access ??= ConversationAccess::READ_WRITE;
+        $data = $this->parseResponseData(
+            $this->httpPut("conversations/$conversationId/participants/$userId", ['access' => $access, 'notify' => $notify])
+        );
 
-        if (200 !== $response->getStatusCode()) {
-            $this->handleErrors($response);
-        }
-
-        return $this->hydrator->hydrate($response, Model\Conversation\ParticipationUpdated::class);
+        return new ConversationJoined($conversationId, $userId, $access, $notify);
     }
 
     /**
-     * @throws Exception
+     * @throws UnauthorizedException
+     * @throws TooManyRequestsException
+     * @throws UnknownErrorException
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws BadRequestException
+     * @throws NotFoundException
      */
-    public function leave(string $conversationId, string $userId)
+    public function updateParticipation(string $conversationId, string $userId, ?string $access = null, bool $notify = true): ParticipationUpdated
     {
-        $response = $this->httpDelete("conversations/$conversationId/participants/$userId");
+        $access ??= ConversationAccess::READ_WRITE;
+        $data = $this->parseResponseData(
+            $this->httpPatch("conversations/$conversationId/participants/$userId", ['access' => $access, 'notify' => $notify])
+        );
 
-        if (200 !== $response->getStatusCode()) {
-            $this->handleErrors($response);
-        }
-
-        return $this->hydrator->hydrate($response, Model\Conversation\ConversationLeft::class);
+        return new ParticipationUpdated($conversationId, $userId, $access, $notify);
     }
 
     /**
-     * @throws Exception
+     * @throws UnauthorizedException
+     * @throws TooManyRequestsException
+     * @throws UnknownErrorException
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws BadRequestException
+     * @throws NotFoundException
      */
-    public function findMessages(string $conversationId, array $filters = []): Model\Conversation\MessageCollection
+    public function leave(string $conversationId, string $userId): ConversationLeft
     {
-        $response = $this->httpGet("conversations/$conversationId/messages", $filters);
+        $data = $this->parseResponseData($this->httpDelete("conversations/$conversationId/participants/$userId"));
 
-        if (200 !== $response->getStatusCode()) {
-            $this->handleErrors($response);
-        }
-
-        return $this->hydrator->hydrate($response, Model\Conversation\MessageCollection::class);
+        return new ConversationLeft($conversationId, $userId);
     }
 
     /**
-     * @throws Exception
+     * @throws UnauthorizedException
+     * @throws TooManyRequestsException
+     * @throws UnknownErrorException
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws BadRequestException
+     * @throws NotFoundException
      */
-    public function postSystemMessage(string $conversationId, string $text, array $custom = []): Model\Conversation\MessageCreated
+    public function delete(string $id): ConversationDeleted
     {
-        $response = $this->httpPost("conversations/$conversationId/messages", [
-            [
-                'type' => 'SystemMessage',
-                'text' => $text,
-                'custom' => (object) $custom,
-            ],
-        ]);
+        $data = $this->parseResponseData($this->httpDelete("conversations/$id"));
 
-        if (200 !== $response->getStatusCode()) {
-            $this->handleErrors($response);
-        }
-
-        return $this->hydrator->hydrate($response, Model\Conversation\MessageCreated::class);
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function postUserMessage(string $conversationId, string $sender, string $text, array $custom = []): Model\Conversation\MessageCreated
-    {
-        $response = $this->httpPost("conversations/$conversationId/messages", [
-            [
-                'type' => 'UserMessage',
-                'sender' => $sender,
-                'text' => $text,
-                'custom' => (object) $custom,
-            ],
-        ]);
-
-        if (200 !== $response->getStatusCode()) {
-            $this->handleErrors($response);
-        }
-
-        return $this->hydrator->hydrate($response, Model\Conversation\MessageCreated::class);
+        return new ConversationDeleted();
     }
 }
