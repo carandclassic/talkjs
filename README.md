@@ -26,14 +26,33 @@ Via Composer
 $ composer require carandclassic/talkjs
 ```
 
+## Usage
+
+This can be used as-is or with auto discovery in Laravel.
+
 ### Create a `TalkJSClient`
 
 ```php
 use CarAndClassic\TalkJS\TalkJSClient;
 
-$appId = 'your App ID';
-$secretKey = 'your secret key';
+$appId = 'my_app_id';
+$secretKey = 'my_secret_key';
 $talkJSClient = new TalkJSClient($appId, $secretKey);
+```
+
+### Laravel
+
+Firstly, add `TALKJS_APP_ID` and `TALKJS_SECRET_KEY` to your env file. These are pulled in from the package's config automatically `talkjs.app_id` and `talkjs.secret_key` respectively.
+
+If you'd like to change this, you can publish the application config and modify the `talkjs.php` config file in your application:
+```
+php artisan vendor:publish --provider=CarAndClassic\\TalkJS\\Providers\\TalkJSServiceProvider
+```
+
+Laravel's automatic service discovery will let you dependency inject `TalkJSClient` as per normal. Alternatively for one-off use you can also pass overriding `appId` and `secretKey` arguments using `app()->make()`:
+
+```php
+$talkJSClient = app()->make(TalkJSClient::class, ['appId' => 'my_custom_app_id', 'secretKey' => 'my_custom_secret_key']);
 ```
 
 ### Input vs API data

@@ -12,9 +12,7 @@
     "require": {
         "php": ">=7.4",
         "ext-json": "*",
-        "symfony/config": "^4.4|^5.2",
-        "symfony/http-client": "^4.4|^5.2",
-        "illuminate/support": "^8.49"
+        "symfony/http-client": "^4.4|^5.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5.4"

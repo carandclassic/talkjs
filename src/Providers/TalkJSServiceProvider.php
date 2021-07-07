@@ -10,6 +10,9 @@ class TalkJSServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        $this->mergeConfigFrom(
+            __DIR__.'/../../config/talkjs.php', 'talkjs'
+        );
         $this->app->bind(TalkJSClient::class, static function($app, $params) {
             $appId = $params['appId'] ?? config('talkjs.app_id');
             $secretKey = $params['secretKey'] ?? config('talkjs.secret_key');
