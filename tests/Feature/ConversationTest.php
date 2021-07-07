@@ -133,7 +133,7 @@ final class ConversationTest extends TestCase
         $api = $this->createApiWithMockHttpClient(
             [
                 new MockResponse(
-                    json_encode(['data' => [$this->conversations[0]]]),
+                    json_encode($this->conversations[0]),
                     ['response_headers' => $this->defaultMockResponseHeaders]
                 )
             ],

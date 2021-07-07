@@ -70,7 +70,7 @@ class UserApi extends TalkJSApi
     {
         $data = $this->parseResponseData($this->httpGet("users/$id"));
 
-        return new User($data['data'][0]);
+        return new User($data);
     }
 
     /**

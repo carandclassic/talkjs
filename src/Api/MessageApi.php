@@ -54,7 +54,7 @@ class MessageApi extends TalkJSApi
     {
         $data = $this->parseResponseData($this->httpGet("conversations/$conversationId/messages/$messageId"));
 
-        return new Message($data['data'][0]);
+        return new Message($data);
     }
 
     /**

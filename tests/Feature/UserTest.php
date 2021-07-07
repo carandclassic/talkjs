@@ -136,7 +136,7 @@ final class UserTest extends TestCase
         $api = $this->createApiWithMockHttpClient(
             [
                 new MockResponse(
-                    json_encode(['data' => [$this->userDetails]]),
+                    json_encode($this->userDetails),
                     ['response_headers' => $this->defaultMockResponseHeaders]
                 )
             ],
