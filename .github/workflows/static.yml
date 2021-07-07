@@ -1,5 +1,5 @@
 on: [pull_request]
-name: Static analysis
+name: Code style check & unit tests
 jobs:
   php-cs-fixer:
     name: PHP-CS-Fixer
@@ -9,14 +9,14 @@ jobs:
       - name: PHP-CS-Fixer
         uses: docker://jakzal/phpqa:php7.4-alpine
         with:
-          args: php-cs-fixer fix --dry-run --diff-format udiff -vvv
+          args: phpcs -n --standard=PSR12 src/
 
-  phpstan:
-    name: PHPStan
+  phpunit:
+    name: PHPUnit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - name: PHPStan
+      - name: PHPUnit
         uses: docker://jakzal/phpqa:php7.4-alpine
         with:
-          args: phpstan analyze --no-prog ress
+          args: vendor/bin/phpunit
