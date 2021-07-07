@@ -108,7 +108,7 @@ class MessageApi extends TalkJSApi
             'custom' => (object) $custom,
         ];
         if ($type === MessageType::USER || isset($senderId)) {
-            $body['senderId'] = $senderId;
+            $body['sender'] = $senderId;
         }
         $data = $this->parseResponseData(
             $this->httpPost("conversations/$conversationId/messages", [$body])
