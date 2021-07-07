@@ -49,7 +49,7 @@ class Message
     {
         $messages = [];
         foreach ($data as $message) {
-            $messages[$data['id']] = new self($message);
+            $messages[$message['id']] = new self($message);
         }
         return $messages;
     }

@@ -27,22 +27,19 @@ class UserCreatedOrUpdated
     public ?string $availabilityText;
 
     public ?string $locale;
-
-    public static function createFromArray(string $id, array $data): UserCreatedOrUpdated
+    
+    public function __construct(string $id, array $data)
     {
-        $userCreatedOrUpdated = new self();
-        $userCreatedOrUpdated->id = $id;
-        $userCreatedOrUpdated->name = $data['name'];
-        $userCreatedOrUpdated->welcomeMessage = $data['welcomeMessage'] ?? null;
-        $userCreatedOrUpdated->photoUrl = $data['photoUrl'] ?? null;
-        $userCreatedOrUpdated->headerPhotoUrl = $data['headerPhotoUrl'] ?? null;
-        $userCreatedOrUpdated->role = $data['role'];
-        $userCreatedOrUpdated->email = $data['email'] ?? [];
-        $userCreatedOrUpdated->phone = $data['phone'] ?? [];
-        $userCreatedOrUpdated->custom = $data['custom'] ?? [];
-        $userCreatedOrUpdated->availabilityText = $data['availabilityText'] ?? null;
-        $userCreatedOrUpdated->locale = $data['locale'] ?? null;
-
-        return $userCreatedOrUpdated;
+        $this->id = $id;
+        $this->name = $data['name'];
+        $this->welcomeMessage = $data['welcomeMessage'] ?? null;
+        $this->photoUrl = $data['photoUrl'] ?? null;
+        $this->headerPhotoUrl = $data['headerPhotoUrl'] ?? null;
+        $this->role = $data['role'];
+        $this->email = $data['email'] ?? [];
+        $this->phone = $data['phone'] ?? [];
+        $this->custom = $data['custom'] ?? [];
+        $this->availabilityText = $data['availabilityText'] ?? null;
+        $this->locale = $data['locale'] ?? null;
     }
 }

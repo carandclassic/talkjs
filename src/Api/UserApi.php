@@ -34,7 +34,7 @@ class UserApi extends TalkJSApi
     {
         $data = $this->parseResponseData($this->httpPut("users/$id", $params));
 
-        return UserCreatedOrUpdated::createFromArray($id, $params);
+        return new UserCreatedOrUpdated($id, $params);
     }
 
     /**
@@ -70,9 +70,8 @@ class UserApi extends TalkJSApi
     {
         $data = $this->parseResponseData($this->httpGet("users/$id"));
 
-        return User::createFromArray($data['data'][0]);
+        return new User($data['data'][0]);
     }
-
 
     /**
      * @throws UnauthorizedException

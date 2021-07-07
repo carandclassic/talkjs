@@ -68,14 +68,13 @@ final class MessageTest extends TestCase
         );
 
         $messages = $api->get($this->conversationId);
-
         $this->assertIsArray($messages);
         $this->assertCount(2, $messages);
         foreach ($messages as $message) {
             $this->assertInstanceOf(Message::class, $message);
         }
-        $this->assertTrue($messages[0]->isUserMessage());
-        $this->assertTrue($messages[1]->isSystemMessage());
+        $this->assertTrue($messages[$this->messages[0]['id']]->isUserMessage());
+        $this->assertTrue($messages[$this->messages[1]['id']]->isSystemMessage());
     }
 
     public function testFind(): void
@@ -83,7 +82,7 @@ final class MessageTest extends TestCase
         $api = $this->createApiWithMockHttpClient(
             [
                 new MockResponse(
-                    json_encode(['data' => $this->messages[0]]),
+                    json_encode(['data' => [$this->messages[0]]]),
                     ['response_headers' => $this->defaultMockResponseHeaders]
                 )
             ],

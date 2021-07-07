@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace CarAndClassic\TalkJS\Tests\Feature;
 
 use CarAndClassic\TalkJS\Api\UserApi;
+use CarAndClassic\TalkJS\Events\UserCreatedOrUpdated;
 use CarAndClassic\TalkJS\Models\Conversation;
 use CarAndClassic\TalkJS\Models\User;
-use CarAndClassic\TalkJS\Models\UserCreatedOrUpdated;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class UserTest extends TestCase
