@@ -83,7 +83,7 @@ $filters = [
 ```php
 $appId = 'YOUR_APP_ID';
 $secretKey = 'YOUR_SECRET_KEY';
-$talkJSClient = new TalkJSClient($appId, $secretKey)
+$talkJSClient = new TalkJSClient($appId, $secretKey);
 ```
 
 ### Users
@@ -158,6 +158,13 @@ $talkJSClient->conversations->leave('my_conversation_id', 'my_user_id');
 $talkJSClient->conversations->delete('my_conversation_id');
 ```
 
+- Update participation settings (notifications and read/write access)
+```php
+$notify = true; // Boolean, default true
+$access = 'ReadWrite'; // ReadWrite or Read, default ReadWrite
+$talkJSClient->conversations->updateParticipation('my_conversation_id', 'my_user_id', $notify, $access);
+```
+
 ### Messages
 
 For more information on custom data and filters, please refer to the TalkJS documentation linked above.
@@ -179,7 +186,7 @@ $talkJSClient->messages->get('my_conversation_id', $filters);
 
 - Find specific message in a conversation
 ```php
-$talkJSClient->messages->find('my_conversation_id', 'message_id', $filters);
+$talkJSClient->messages->find('my_conversation_id', 'message_id');
 ```
 
 - Post a system message, returns a `MessageCreated` event class with input data and `type` of `SystemMessage`
