@@ -1,6 +1,6 @@
 {
     "name": "carandclassic/talkjs",
-    "description": "PHP client for talk.js API",
+    "description": "PHP client for TalkJS API",
     "license": "MIT",
     "keywords": ["carandclassic", "api", "chat", "talk", "talkjs"],
     "authors": [
