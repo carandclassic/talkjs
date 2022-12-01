@@ -9,25 +9,15 @@ use CarAndClassic\TalkJS\Enumerations\MessageType;
 class Message
 {
     public string $id;
-
     public string $type;
-
     public string $conversationId;
-
     public ?string $senderId;
-
     public string $text;
-
     public array $readBy;
-
     public string $origin;
-
     public ?string $location;
-
     public array $custom;
-
-    public ?string $attachment;
-
+    public ?array $attachment;
     public int $createdAt;
 
     public function __construct(array $data)
