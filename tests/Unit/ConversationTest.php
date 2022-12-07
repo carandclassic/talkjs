@@ -9,15 +9,13 @@ use CarAndClassic\TalkJS\Tests\TestCase;
 
 final class ConversationTest extends TestCase
 {
-    private array $userIds;
-
     private array $conversations;
 
     public function setUp(): void
     {
         parent::setUp();
         $createdAt = time() * 1000;
-        $this->userIds = [
+        $userIds = [
             'TestConversationUserId1',
             'TestConversationUserId2'
         ];
@@ -33,10 +31,10 @@ final class ConversationTest extends TestCase
                     'id' => "test",
                     'type' => "UserMessage",
                     'conversationId' => "dev_test",
-                    'senderId' => $this->userIds[1],
+                    'senderId' => $userIds[1],
                     'text' => "This is the message copy",
                     'readBy' => [
-                        $this->userIds[0],
+                        $userIds[0],
                     ],
                     'origin' => "rest",
                     'location' => null,
@@ -45,11 +43,11 @@ final class ConversationTest extends TestCase
                     'createdAt' => $createdAt,
                 ],
                 'participants' => [
-                    $this->userIds[0] => [
+                    $userIds[0] => [
                         'access' => 'ReadWrite',
                         'notify' => true
                     ],
-                    $this->userIds[1] => [
+                    $userIds[1] => [
                         'access' => 'Read',
                         'notify' => false
                     ]
@@ -65,11 +63,11 @@ final class ConversationTest extends TestCase
                 'custom' => ['test' => 'test'],
                 'lastMessage' => null,
                 'participants' => [
-                    $this->userIds[0] => [
+                    $userIds[0] => [
                         'access' => 'ReadWrite',
                         'notify' => true
                     ],
-                    $this->userIds[1] => [
+                    $userIds[1] => [
                         'access' => 'Read',
                         'notify' => false
                     ]
@@ -87,7 +85,7 @@ final class ConversationTest extends TestCase
                     'id' => "test",
                     'type' => "UserMessage",
                     'conversationId' => "dev_test",
-                    'senderId' => $this->userIds[1],
+                    'senderId' => $userIds[1],
                     'text' => "This is the message copy",
                     'readBy' => [],
                     'origin' => "rest",
@@ -97,11 +95,11 @@ final class ConversationTest extends TestCase
                     'createdAt' => $createdAt,
                 ],
                 'participants' => [
-                    $this->userIds[0] => [
+                    $userIds[0] => [
                         'access' => 'ReadWrite',
                         'notify' => true
                     ],
-                    $this->userIds[1] => [
+                    $userIds[1] => [
                         'access' => 'Read',
                         'notify' => false
                     ]

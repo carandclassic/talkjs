@@ -10,8 +10,6 @@ use CarAndClassic\TalkJS\Tests\TestCase;
 
 final class MessageTest extends TestCase
 {
-    private string $conversationId;
-
     private string $senderId;
 
     private array $messages;
@@ -24,7 +22,7 @@ final class MessageTest extends TestCase
     {
         parent::setUp();
 
-        $this->conversationId = 'testConversationId';
+        $conversationId = 'testConversationId';
         $this->senderId = 'testSenderId';
         $this->userIds = [
             'TestConversationUserId1',
@@ -34,7 +32,7 @@ final class MessageTest extends TestCase
             [
                 'id' => '1', // At time of writing results are returned descending
                 'type' => MessageType::USER,
-                'conversationId' => $this->conversationId,
+                'conversationId' => $conversationId,
                 'senderId' => $this->senderId,
                 'text' => 'Test User Message',
                 'readBy' => [
@@ -49,7 +47,7 @@ final class MessageTest extends TestCase
             [
                 'id' => '2',
                 'type' => MessageType::SYSTEM,
-                'conversationId' => $this->conversationId,
+                'conversationId' => $conversationId,
                 'senderId' => null,
                 'text' => 'Test System Message',
                 'readBy' => [],
