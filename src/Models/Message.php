@@ -14,6 +14,7 @@ class Message
     public ?string $senderId;
     public string $text;
     public array $readBy;
+    public bool $isRead;
     public string $origin;
     public ?string $location;
     public array $custom;
@@ -28,6 +29,7 @@ class Message
         $this->conversationId = (string)$data['conversationId'];
         $this->text = $data['text'];
         $this->readBy = $data['readBy'];
+        $this->isRead = $this->checkIsRead($data);
         $this->origin = $data['origin'];
         $this->location = $data['location'] ?? null;
         $this->custom = $data['custom'];
@@ -52,5 +54,19 @@ class Message
     public function isSystemMessage(): bool
     {
         return $this->type == MessageType::SYSTEM;
+    }
+
+    public function isReadBy(string $userId): bool
+    {
+        if ($userId === $this->senderId) {
+            return true;
+        }
+
+        return in_array($userId, $this->readBy, true);
+    }
+
+    private function checkIsRead(array $data): bool
+    {
+        return !empty($data['readBy']);
     }
 }
