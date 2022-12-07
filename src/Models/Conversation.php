@@ -48,9 +48,14 @@ class Conversation
         return $conversations;
     }
 
-    public function unreadBy(Message $message = null): array
+    public function unreadBy(Message $message = null): array|null
     {
         $message ??= $this->lastMessage;
+
+        if (is_null($message)) {
+            return null;
+        }
+
         $readBy = [...$message->readBy, $message->senderId];
         $participants = array_keys($this->participants);
 
