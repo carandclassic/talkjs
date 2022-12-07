@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CarAndClassic\TalkJS\Models;
 
 use CarAndClassic\TalkJS\Enumerations\MessageType;
+use CarAndClassic\TalkJS\TalkJSClient;
 
 class Message
 {
@@ -63,6 +64,13 @@ class Message
         }
 
         return in_array($userId, $this->readBy, true);
+    }
+
+    public function unreadBy(): array
+    {
+        $conversation = app(TalkJSClient::class)->conversations->find($this->conversationId);
+
+        return $conversation->unreadBy($this);
     }
 
     private function checkIsRead(array $data): bool

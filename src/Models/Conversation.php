@@ -24,8 +24,6 @@ class Conversation
 
     public array $participants;
 
-    public bool $isLastMessageRead;
-
     public int $createdAt;
 
     public function __construct(array $data)
@@ -38,7 +36,6 @@ class Conversation
         $this->custom = $data['custom'] ?? [];
         $this->lastMessage = isset($data['lastMessage']) ? new Message($data['lastMessage']) : null;
         $this->participants = $data['participants'] ?? [];
-        $this->isLastMessageRead = $this->checkIsLastMessageRead($data);
         $this->createdAt = $data['createdAt'];
     }
 
@@ -51,25 +48,12 @@ class Conversation
         return $conversations;
     }
 
-    public function isLastMessageReadBy(string $userId): bool
+    public function unreadBy(Message $message = null): array
     {
-        if ($userId === $this->senderId) {
-            return true;
-        }
+        $message ??= $this->lastMessage;
+        $readBy = [...$message->readBy, $message->senderId];
+        $participants = array_keys($this->participants);
 
-        return in_array($userId, $this->readBy, true);
-    }
-
-    public function unreadByPartisipants(): array
-    {
-        $readBy = [...$this->lastMessage->readBy, $this->senderId];
-        $partisipants = array_keys($this->participants);
-
-        return array_diff($partisipants, $readBy);
-    }
-
-    private function checkIsLastMessageRead(array $data): bool
-    {
-        return !empty($data['lastMessage']['readBy']);
+        return array_diff($participants, $readBy);
     }
 }
