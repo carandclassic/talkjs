@@ -20,8 +20,10 @@ class Message
     public ?array $attachment;
     public int $createdAt;
 
-    public function __construct(array $data)
+    public function __construct(array $data = [])
     {
+        if(empty($data)) return;
+
         $this->id = (string)$data['id'];
         $this->type = $data['type'];
         $this->senderId = $data['senderId'] ?? null;
