@@ -20,7 +20,6 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 final class ConversationTest extends TestCase
 {
     private array $userIds;
-
     private array $conversations;
 
     public function setUp(): void

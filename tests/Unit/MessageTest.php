@@ -11,11 +11,8 @@ use CarAndClassic\TalkJS\Tests\TestCase;
 final class MessageTest extends TestCase
 {
     private string $senderId;
-
     private array $messages;
-
     private Message $message1;
-
     private Message $message2;
 
     protected function setUp(): void

@@ -120,7 +120,7 @@ final class ConversationTest extends TestCase
         }
     }
 
-    public function testUnreadBy()
+    public function testUnreadBy(): void
     {
         $conversation1 = new Conversation($this->conversations[0]);
         $conversation2 = new Conversation($this->conversations[1]);

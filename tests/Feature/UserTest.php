@@ -14,9 +14,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 final class UserTest extends TestCase
 {
     private string $userId;
-
     private array $userDetails;
-
     private array $userConversations;
 
     protected function setUp(): void

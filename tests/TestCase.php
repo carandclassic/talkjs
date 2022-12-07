@@ -12,7 +12,6 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 abstract class TestCase extends BaseTestCase
 {
     protected array $defaultMockResponseHeaders;
-
     protected array $defaultFilters;
 
     protected function setUp(): void

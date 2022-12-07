@@ -16,9 +16,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 final class MessageTest extends TestCase
 {
     private string $conversationId;
-
     private string $senderId;
-
     private array $messages;
 
     protected function setUp(): void
