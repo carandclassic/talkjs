@@ -300,26 +300,4 @@ final class ConversationTest extends TestCase
 
         $this->assertInstanceOf(ConversationDeleted::class, $conversationDeleted);
     }
-
-    public function testUnreadBy()
-    {
-        $api = $this->createApiWithMockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(['data' => $this->conversations]),
-                    ['response_headers' => $this->defaultMockResponseHeaders]
-                )
-            ],
-            ConversationApi::class
-        );
-
-        $conversations = $api->get($this->defaultFilters);
-        $conversation1 = current($conversations);
-        $conversation2 = next($conversations);
-        $conversation3 = next($conversations);
-
-        $this->assertEmpty($conversation1->unreadBy());
-        $this->assertNull($conversation2->unreadBy());
-        $this->assertEquals($conversation3->unreadBy(), ['TestConversationUserId1']);
-    }
 }
