@@ -20,7 +20,7 @@ class Conversation
 
     public array $custom;
 
-    public Message $lastMessage;
+    public ?Message $lastMessage;
 
     public array $participants;
 
@@ -34,7 +34,7 @@ class Conversation
         $this->photoUrl = $data['photoUrl'] ?? null;
         $this->welcomeMessages = $data['welcomeMessages'] ?? [];
         $this->custom = $data['custom'] ?? [];
-        $this->lastMessage = new Message($data['lastMessage']) ?? new Message();
+        $this->lastMessage = isset($data['lastMessage']) ? new Message($data['lastMessage']) : null;
         $this->participants = $data['participants'] ?? [];
         $this->createdAt = $data['createdAt'];
     }
