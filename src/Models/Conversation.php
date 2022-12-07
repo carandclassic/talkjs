@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CarAndClassic\TalkJS\Models;
 
+use CarAndClassic\TalkJS\Models\Message;
+
 class Conversation
 {
     public string $id;
@@ -18,6 +20,8 @@ class Conversation
 
     public array $custom;
 
+    public ?Message $lastMessage;
+
     public array $participants;
 
     public int $createdAt;
@@ -30,6 +34,7 @@ class Conversation
         $this->photoUrl = $data['photoUrl'] ?? null;
         $this->welcomeMessages = $data['welcomeMessages'] ?? [];
         $this->custom = $data['custom'] ?? [];
+        $this->lastMessage = isset($data['lastMessage']) ? new Message($data['lastMessage']) : null;
         $this->participants = $data['participants'] ?? [];
         $this->createdAt = $data['createdAt'];
     }

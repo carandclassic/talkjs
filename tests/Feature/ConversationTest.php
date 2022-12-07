@@ -13,6 +13,7 @@ use CarAndClassic\TalkJS\Events\ConversationLeft;
 use CarAndClassic\TalkJS\Events\ConversationRead;
 use CarAndClassic\TalkJS\Events\ParticipationUpdated;
 use CarAndClassic\TalkJS\Models\Conversation;
+use CarAndClassic\TalkJS\Models\Message;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class ConversationTest extends TestCase
@@ -37,6 +38,21 @@ final class ConversationTest extends TestCase
                 'photoUrl' => null,
                 'welcomeMessages' => ['Test Welcome Message'],
                 'custom' => ['test' => 'test'],
+                'lastMessage' => new Message([
+                    'id' => "test",
+                    'type' => "UserMessage",
+                    'conversationId' => "dev_test",
+                    'senderId' => $this->userIds[1],
+                    'text' => "This is the message copy",
+                    'readBy' => [
+                        $this->userIds[0],
+                    ],
+                    'origin' => "rest",
+                    'location' => null,
+                    'custom' => [],
+                    'attachment' => null,
+                    'createdAt' => $createdAt,
+                ]),
                 'participants' => [
                      $this->userIds[0] => [
                         'access' => 'ReadWrite',
@@ -56,6 +72,7 @@ final class ConversationTest extends TestCase
                 'photoUrl' => null,
                 'welcomeMessages' => ['Test Welcome Message'],
                 'custom' => ['test' => 'test'],
+                'lastMessage' => null,
                 'participants' => [
                     $this->userIds[0] => [
                         'access' => 'ReadWrite',
