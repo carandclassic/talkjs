@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace CarAndClassic\TalkJS\Models;
 
 use CarAndClassic\TalkJS\Enumerations\MessageType;
-use CarAndClassic\TalkJS\TalkJSClient;
 
 class Message
 {
@@ -15,7 +14,6 @@ class Message
     public ?string $senderId;
     public string $text;
     public array $readBy;
-    public bool $isRead;
     public string $origin;
     public ?string $location;
     public array $custom;
@@ -30,7 +28,6 @@ class Message
         $this->conversationId = (string)$data['conversationId'];
         $this->text = $data['text'];
         $this->readBy = $data['readBy'];
-        $this->isRead = $this->checkIsRead($data);
         $this->origin = $data['origin'];
         $this->location = $data['location'] ?? null;
         $this->custom = $data['custom'];
@@ -66,15 +63,10 @@ class Message
         return in_array($userId, $this->readBy, true);
     }
 
-    public function unreadBy(): array
+    public function isRead(): bool
     {
-        $conversation = app(TalkJSClient::class)->conversations->find($this->conversationId);
+        $unread = array_diff($this->readBy, [$this->senderId]);
 
-        return $conversation->unreadBy($this);
-    }
-
-    private function checkIsRead(array $data): bool
-    {
-        return !empty($data['readBy']);
+        return !empty($unread);
     }
 }

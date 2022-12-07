@@ -8,6 +8,7 @@ use CarAndClassic\TalkJS\Api\UserApi;
 use CarAndClassic\TalkJS\Events\UserCreatedOrUpdated;
 use CarAndClassic\TalkJS\Models\Conversation;
 use CarAndClassic\TalkJS\Models\User;
+use CarAndClassic\TalkJS\Tests\TestCase;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class UserTest extends TestCase

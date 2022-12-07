@@ -10,6 +10,7 @@ use CarAndClassic\TalkJS\Events\MessageCreated;
 use CarAndClassic\TalkJS\Events\MessageDeleted;
 use CarAndClassic\TalkJS\Events\MessageEdited;
 use CarAndClassic\TalkJS\Models\Message;
+use CarAndClassic\TalkJS\Tests\TestCase;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class MessageTest extends TestCase

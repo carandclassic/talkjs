@@ -14,6 +14,7 @@ use CarAndClassic\TalkJS\Events\ConversationRead;
 use CarAndClassic\TalkJS\Events\ParticipationUpdated;
 use CarAndClassic\TalkJS\Models\Conversation;
 use CarAndClassic\TalkJS\Models\Message;
+use CarAndClassic\TalkJS\Tests\TestCase;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class ConversationTest extends TestCase
