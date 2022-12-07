@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CarAndClassic\TalkJS\Tests\Feature;
+namespace CarAndClassic\TalkJS\Tests;
 
 use CarAndClassic\TalkJS\Api\TalkJSApi;
 use PHPUnit\Framework\TestCase as BaseTestCase;
@@ -12,7 +12,6 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 abstract class TestCase extends BaseTestCase
 {
     protected array $defaultMockResponseHeaders;
-
     protected array $defaultFilters;
 
     protected function setUp(): void

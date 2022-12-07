@@ -47,4 +47,17 @@ class Conversation
         }
         return $conversations;
     }
+
+    public function unreadBy(): ?array
+    {
+        if ($this->lastMessage === null) {
+            return null;
+        }
+
+        $readBy = $this->lastMessage->readBy;
+        $readBy[] = $this->lastMessage->senderId;
+        $participants = array_keys($this->participants);
+
+        return array_diff($participants, $readBy);
+    }
 }

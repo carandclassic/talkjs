@@ -53,4 +53,20 @@ class Message
     {
         return $this->type == MessageType::SYSTEM;
     }
+
+    public function isReadBy(string $userId): bool
+    {
+        if ($userId === $this->senderId) {
+            return true;
+        }
+
+        return in_array($userId, $this->readBy, true);
+    }
+
+    public function isRead(): bool
+    {
+        $unread = array_diff($this->readBy, [$this->senderId]);
+
+        return !empty($unread);
+    }
 }

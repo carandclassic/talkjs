@@ -14,12 +14,12 @@ use CarAndClassic\TalkJS\Events\ConversationRead;
 use CarAndClassic\TalkJS\Events\ParticipationUpdated;
 use CarAndClassic\TalkJS\Models\Conversation;
 use CarAndClassic\TalkJS\Models\Message;
+use CarAndClassic\TalkJS\Tests\TestCase;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class ConversationTest extends TestCase
 {
     private array $userIds;
-
     private array $conversations;
 
     public function setUp(): void
@@ -54,7 +54,7 @@ final class ConversationTest extends TestCase
                     'createdAt' => $createdAt,
                 ]),
                 'participants' => [
-                     $this->userIds[0] => [
+                    $this->userIds[0] => [
                         'access' => 'ReadWrite',
                         'notify' => true
                     ],
@@ -73,6 +73,38 @@ final class ConversationTest extends TestCase
                 'welcomeMessages' => ['Test Welcome Message'],
                 'custom' => ['test' => 'test'],
                 'lastMessage' => null,
+                'participants' => [
+                    $this->userIds[0] => [
+                        'access' => 'ReadWrite',
+                        'notify' => true
+                    ],
+                    $this->userIds[1] => [
+                        'access' => 'Read',
+                        'notify' => false
+                    ]
+                ],
+                'createdAt' => $createdAt
+            ],
+            [
+                'id' => 'testConversationId3',
+                'subject' => 'Test Conversation 3',
+                'topicId' => 'Test Topic 3',
+                'photoUrl' => null,
+                'welcomeMessages' => ['Test Welcome Message'],
+                'custom' => ['test' => 'test'],
+                'lastMessage' => new Message([
+                    'id' => "test",
+                    'type' => "UserMessage",
+                    'conversationId' => "dev_test",
+                    'senderId' => $this->userIds[1],
+                    'text' => "This is the message copy",
+                    'readBy' => [],
+                    'origin' => "rest",
+                    'location' => null,
+                    'custom' => [],
+                    'attachment' => null,
+                    'createdAt' => $createdAt,
+                ]),
                 'participants' => [
                     $this->userIds[0] => [
                         'access' => 'ReadWrite',
