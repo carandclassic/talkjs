@@ -8,6 +8,7 @@ use CarAndClassic\TalkJS\Api\ConversationApi;
 use CarAndClassic\TalkJS\Api\MessageApi;
 use CarAndClassic\TalkJS\Api\UserApi;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class TalkJSClient
 {
@@ -16,10 +17,11 @@ final class TalkJSClient
     public ConversationApi $conversations;
 
     public MessageApi $messages;
+    private HttpClientInterface $httpClient;
 
     public function __construct(string $appId, string $secretKey)
     {
-        $httpClient = HttpClient::create([
+        $this->httpClient = HttpClient::create([
             'base_uri' => 'https://api.talkjs.com/v1/' . $appId . '/',
             'auth_bearer' => $secretKey,
             'headers' => [
@@ -27,8 +29,25 @@ final class TalkJSClient
                 'Accept' => 'application/json'
             ],
         ]);
-        $this->users = new UserApi($httpClient);
-        $this->conversations = new ConversationApi($httpClient);
-        $this->messages = new MessageApi($httpClient);
+        $this->users = new UserApi($this->httpClient);
+        $this->conversations = new ConversationApi($this->httpClient);
+        $this->messages = new MessageApi($this->httpClient);
+    }
+
+    public function fake(bool $conversations = true, bool $messages = false, bool $users = false): void
+    {
+        if (!($conversations || $messages || $users)) {
+            return;
+        }
+
+        if ($conversations) {
+            $this->conversations = new ConversationApiFake($this->httpClient);
+        }
+//        if ($messages) {
+//            $this->messages = new MessageApiFake($this->httpClient);
+//        }
+//        if ($users) {
+//            $this->users = new UserApiFake($this->httpClient);
+//        }
     }
 }
