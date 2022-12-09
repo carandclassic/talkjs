@@ -7,6 +7,7 @@ namespace CarAndClassic\TalkJS;
 use CarAndClassic\TalkJS\Api\ConversationApi;
 use CarAndClassic\TalkJS\Api\MessageApi;
 use CarAndClassic\TalkJS\Api\UserApi;
+use CarAndClassic\TalkJS\TestApi\ConversationApiFake;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
