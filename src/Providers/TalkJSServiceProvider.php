@@ -10,6 +10,10 @@ use Illuminate\Support\ServiceProvider;
 
 class TalkJSServiceProvider extends ServiceProvider
 {
+    public array $singletons = [
+        TalkJSClient::class,
+    ];
+
     public function register(): void
     {
         $this->mergeConfigFrom(
