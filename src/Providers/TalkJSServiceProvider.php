@@ -10,10 +10,6 @@ use Illuminate\Support\ServiceProvider;
 
 class TalkJSServiceProvider extends ServiceProvider
 {
-    public array $singletons = [
-        TalkJSClient::class,
-    ];
-
     public function register(): void
     {
         $this->mergeConfigFrom(
@@ -21,7 +17,7 @@ class TalkJSServiceProvider extends ServiceProvider
             'talkjs'
         );
 
-        $this->app->bind(
+        $this->app->singleton(
             TalkJSClient::class,
             static function ($app, $params) {
                 $appId = $params['appId'] ?? config('talkjs.app_id');
