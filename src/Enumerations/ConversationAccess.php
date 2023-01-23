@@ -7,5 +7,5 @@ namespace CarAndClassic\TalkJS\Enumerations;
 final class ConversationAccess
 {
     public const READ_WRITE = 'ReadWrite';
-    public const READ = 'read';
+    public const READ = 'Read';
 }
