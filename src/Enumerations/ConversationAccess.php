@@ -8,4 +8,5 @@ final class ConversationAccess
 {
     public const READ_WRITE = 'ReadWrite';
     public const READ = 'Read';
+    public const NONE = 'None';
 }
